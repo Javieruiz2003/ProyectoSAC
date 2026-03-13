@@ -6,17 +6,17 @@ cmake:
     qualifiers: 'nrf5340/cpuapp'
     revision: ''
   images:
-   - name: 'brazo_robotico'
-     source-dir: '/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico'
+   - name: 'ProyectoSAC'
+     source-dir: '/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC'
      type: 'MAIN'
   kconfig:
     files:
-     - '/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/_sysbuild/empty.conf'
-     - '/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/_sysbuild/empty.conf'
+     - '/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/_sysbuild/empty.conf'
+     - '/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/_sysbuild/empty.conf'
     user-files:
-     - '/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/_sysbuild/empty.conf'
+     - '/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/_sysbuild/empty.conf'
 version: '0.1.0'
 west:
-  command: '/opt/nordic/ncs/toolchains/322ac893fe/bin/west build --build-dir /Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build /Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico --pristine --board nrf5340dk/nrf5340/cpuapp -- -DDEBUG_THREAD_INFO=On -DCONFIG_DEBUG_THREAD_INFO=y -Dbrazo_robotico_DEBUG_THREAD_INFO=On'
+  command: '/opt/nordic/ncs/toolchains/322ac893fe/bin/west build --build-dir /Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build /Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC --pristine --board nrf5340dk/nrf5340/cpuapp -- -DCONFIG_DEBUG_THREAD_INFO=y'
   topdir: '/opt/nordic/ncs/v3.2.1'
   version: '1.4.0'

@@ -1,7 +1,7 @@
-default: brazo_robotico
-build_dir: /Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build
+default: ProyectoSAC
+build_dir: /Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build
 domains:
-  - name: brazo_robotico
-    build_dir: /Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/brazo_robotico
+  - name: ProyectoSAC
+    build_dir: /Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/ProyectoSAC
 flash_order:
-  - brazo_robotico
+  - ProyectoSAC

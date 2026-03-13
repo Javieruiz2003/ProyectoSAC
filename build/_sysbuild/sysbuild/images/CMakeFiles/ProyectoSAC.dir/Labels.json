@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/_sysbuild/sysbuild/images/CMakeFiles/ProyectoSAC"
+		},
+		{
+			"file" : "/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/_sysbuild/sysbuild/images/CMakeFiles/ProyectoSAC.rule"
+		},
+		{
+			"file" : "/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/_sysbuild/sysbuild/images/CMakeFiles/ProyectoSAC-complete.rule"
+		},
+		{
+			"file" : "/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-build.rule"
+		},
+		{
+			"file" : "/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-configure.rule"
+		},
+		{
+			"file" : "/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-download.rule"
+		},
+		{
+			"file" : "/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-install.rule"
+		},
+		{
+			"file" : "/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-mkdir.rule"
+		},
+		{
+			"file" : "/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-patch.rule"
+		},
+		{
+			"file" : "/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"ProyectoSAC"
+		],
+		"name" : "ProyectoSAC"
+	}
+}

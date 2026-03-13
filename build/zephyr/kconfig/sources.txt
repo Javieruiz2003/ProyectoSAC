@@ -1,8 +1,8 @@
-/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/Kconfig/Kconfig.sysbuild.modules
-/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/Kconfig/boards/Kconfig.nrf5340dk
-/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/Kconfig/boards/Kconfig.sysbuild
-/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/Kconfig/soc/Kconfig.soc
-/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/Kconfig/soc/Kconfig.sysbuild
+/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/Kconfig/Kconfig.sysbuild.modules
+/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/Kconfig/boards/Kconfig.nrf5340dk
+/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/Kconfig/boards/Kconfig.sysbuild
+/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/Kconfig/soc/Kconfig.soc
+/Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/Kconfig/soc/Kconfig.sysbuild
 /opt/nordic/ncs/v3.2.1/nrf/soc/nordic/Kconfig.soc
 /opt/nordic/ncs/v3.2.1/nrf/soc/nordic/Kconfig.sysbuild
 /opt/nordic/ncs/v3.2.1/nrf/soc/nordic/common/vpr/Kconfig.sysbuild
