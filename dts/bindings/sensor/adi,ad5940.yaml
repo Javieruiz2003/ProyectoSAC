@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0
+
+description: AD5940 analog front end with SPI connection
+
+compatible: "adi,ad5940"
+
+include: ["spi-device.yaml"]

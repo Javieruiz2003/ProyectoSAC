@@ -1,0 +1,7 @@
+default: brazo_robotico
+build_dir: /Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build
+domains:
+  - name: brazo_robotico
+    build_dir: /Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/brazo_robotico
+flash_order:
+  - brazo_robotico

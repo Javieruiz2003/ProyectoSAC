@@ -1,0 +1,13 @@
+# Target labels
+ brazo_robotico
+# Source files and their labels
+/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/_sysbuild/sysbuild/images/CMakeFiles/brazo_robotico
+/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/_sysbuild/sysbuild/images/CMakeFiles/brazo_robotico.rule
+/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/_sysbuild/sysbuild/images/CMakeFiles/brazo_robotico-complete.rule
+/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/_sysbuild/sysbuild/images/brazo_robotico-prefix/src/brazo_robotico-stamp/brazo_robotico-build.rule
+/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/_sysbuild/sysbuild/images/brazo_robotico-prefix/src/brazo_robotico-stamp/brazo_robotico-configure.rule
+/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/_sysbuild/sysbuild/images/brazo_robotico-prefix/src/brazo_robotico-stamp/brazo_robotico-download.rule
+/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/_sysbuild/sysbuild/images/brazo_robotico-prefix/src/brazo_robotico-stamp/brazo_robotico-install.rule
+/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/_sysbuild/sysbuild/images/brazo_robotico-prefix/src/brazo_robotico-stamp/brazo_robotico-mkdir.rule
+/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/_sysbuild/sysbuild/images/brazo_robotico-prefix/src/brazo_robotico-stamp/brazo_robotico-patch.rule
+/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/_sysbuild/sysbuild/images/brazo_robotico-prefix/src/brazo_robotico-stamp/brazo_robotico-update.rule
