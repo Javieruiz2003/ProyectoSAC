@@ -2,21 +2,21 @@ cmake:
   board:
     name: 'nrf5340dk'
     path:
-     - '/opt/nordic/ncs/v3.2.1/zephyr/boards/nordic/nrf5340dk'
+     - 'C:/ncs/v3.2.2/zephyr/boards/nordic/nrf5340dk'
     qualifiers: 'nrf5340/cpuapp'
     revision: ''
   images:
-   - name: 'brazo_robotico'
-     source-dir: '/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico'
+   - name: 'proyectosac'
+     source-dir: 'C:/Users/rafac/Documents/proyectosac'
      type: 'MAIN'
   kconfig:
     files:
-     - '/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/_sysbuild/empty.conf'
-     - '/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/_sysbuild/empty.conf'
+     - 'C:/Users/rafac/Documents/proyectosac/build/_sysbuild/empty.conf'
+     - 'C:/Users/rafac/Documents/proyectosac/build/_sysbuild/empty.conf'
     user-files:
-     - '/Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/_sysbuild/empty.conf'
+     - 'C:/Users/rafac/Documents/proyectosac/build/_sysbuild/empty.conf'
 version: '0.1.0'
 west:
-  command: '/opt/nordic/ncs/toolchains/322ac893fe/bin/west build --build-dir /Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build /Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico --pristine --board nrf5340dk/nrf5340/cpuapp -- -DDEBUG_THREAD_INFO=On -DCONFIG_DEBUG_THREAD_INFO=y -Dbrazo_robotico_DEBUG_THREAD_INFO=On'
-  topdir: '/opt/nordic/ncs/v3.2.1'
+  command: 'C:\ncs\toolchains\c717907b94\opt\bin\Scripts\west build --build-dir c:/Users/rafac/Documents/proyectosac/build c:/Users/rafac/Documents/proyectosac --pristine --board nrf5340dk/nrf5340/cpuapp -- -DDEBUG_THREAD_INFO=On -DCONFIG_DEBUG_THREAD_INFO=y -Dproyectosac_DEBUG_THREAD_INFO=On'
+  topdir: 'c:\ncs\v3.2.2'
   version: '1.4.0'

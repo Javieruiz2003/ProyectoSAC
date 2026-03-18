@@ -1,7 +1,7 @@
-default: brazo_robotico
-build_dir: /Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build
+default: proyectosac
+build_dir: C:/Users/rafac/Documents/proyectosac/build
 domains:
-  - name: brazo_robotico
-    build_dir: /Users/javierruizhurtado/Documents/WorkspaceSAC/brazo_robotico/build/brazo_robotico
+  - name: proyectosac
+    build_dir: C:/Users/rafac/Documents/proyectosac/build/proyectosac
 flash_order:
-  - brazo_robotico
+  - proyectosac

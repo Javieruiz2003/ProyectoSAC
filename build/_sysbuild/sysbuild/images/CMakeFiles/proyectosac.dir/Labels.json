@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/CMakeFiles/proyectosac"
+		},
+		{
+			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/CMakeFiles/proyectosac.rule"
+		},
+		{
+			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/CMakeFiles/proyectosac-complete.rule"
+		},
+		{
+			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-build.rule"
+		},
+		{
+			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-configure.rule"
+		},
+		{
+			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-download.rule"
+		},
+		{
+			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-install.rule"
+		},
+		{
+			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-mkdir.rule"
+		},
+		{
+			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-patch.rule"
+		},
+		{
+			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"proyectosac"
+		],
+		"name" : "proyectosac"
+	}
+}

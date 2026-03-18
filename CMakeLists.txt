@@ -6,4 +6,6 @@ project(my_project)
 
 target_sources(app PRIVATE
     src/main.c
+    src/ad5940/ADICUP3029/AD5940PortZephyr.c
+
 )

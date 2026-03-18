@@ -1,0 +1,13 @@
+# Target labels
+ proyectosac
+# Source files and their labels
+C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/CMakeFiles/proyectosac
+C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/CMakeFiles/proyectosac.rule
+C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/CMakeFiles/proyectosac-complete.rule
+C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-build.rule
+C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-configure.rule
+C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-download.rule
+C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-install.rule
+C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-mkdir.rule
+C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-patch.rule
+C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-update.rule

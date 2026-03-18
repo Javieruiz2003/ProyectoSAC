@@ -1,8 +1,8 @@
-# Install script for directory: /opt/nordic/ncs/v3.2.1/nrf/sysbuild
+# Install script for directory: C:/ncs/v3.2.2/nrf/sysbuild
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/usr/local")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/sysbuild_toplevel")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
