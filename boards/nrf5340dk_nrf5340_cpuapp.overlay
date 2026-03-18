@@ -3,7 +3,6 @@
  * Add your peripheral and pin configurations here.
  * See: https://docs.zephyrproject.org/latest/build/dts/howtos.html
  */
-
 &pinctrl {
     spi4_default: spi4_default {
         group1 {
@@ -28,12 +27,10 @@
     pinctrl-0 = <&spi4_default>;
     pinctrl-1 = <&spi4_sleep>;
     pinctrl-names = "default", "sleep";
-    cs-gpios = <&gpio1 12 GPIO_ACTIVE_LOW>; // CS = P1.12 
+    cs-gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;
 
     ad5940: ad5940@0 {
-        compatible = "adi,ad5940";
         reg = <0>;
-        spi-max-frequency = <4000000>;
     };
 };
 

@@ -1,0 +1,13 @@
+# Target labels
+ ProyectoSAC
+# Source files and their labels
+C:/Users/fdsan/Documents/GitHub/ProyectoSAC/build/_sysbuild/sysbuild/images/CMakeFiles/ProyectoSAC
+C:/Users/fdsan/Documents/GitHub/ProyectoSAC/build/_sysbuild/sysbuild/images/CMakeFiles/ProyectoSAC.rule
+C:/Users/fdsan/Documents/GitHub/ProyectoSAC/build/_sysbuild/sysbuild/images/CMakeFiles/ProyectoSAC-complete.rule
+C:/Users/fdsan/Documents/GitHub/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-build.rule
+C:/Users/fdsan/Documents/GitHub/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-configure.rule
+C:/Users/fdsan/Documents/GitHub/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-download.rule
+C:/Users/fdsan/Documents/GitHub/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-install.rule
+C:/Users/fdsan/Documents/GitHub/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-mkdir.rule
+C:/Users/fdsan/Documents/GitHub/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-patch.rule
+C:/Users/fdsan/Documents/GitHub/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-update.rule

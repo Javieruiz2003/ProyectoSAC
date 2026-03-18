@@ -1,0 +1,59 @@
+cmake:
+  application:
+    configuration-dir: 'C:/Users/fdsan/Documents/GitHub/ProyectoSAC'
+    source-dir: 'C:/Users/fdsan/Documents/GitHub/ProyectoSAC'
+  board:
+    name: 'nrf5340dk'
+    path:
+     - 'C:/ncs/v3.2.1/zephyr/boards/nordic/nrf5340dk'
+    qualifiers: 'nrf5340/cpuapp'
+    revision: ''
+  devicetree:
+    bindings-dirs:
+     - 'C:/ncs/v3.2.1/nrf/dts/bindings'
+     - 'C:/Users/fdsan/Documents/GitHub/ProyectoSAC/dts/bindings'
+     - 'C:/ncs/v3.2.1/zephyr/dts/bindings'
+    files:
+     - 'C:/ncs/v3.2.1/zephyr/boards/nordic/nrf5340dk/nrf5340dk_nrf5340_cpuapp.dts'
+     - 'C:/Users/fdsan/Documents/GitHub/ProyectoSAC/boards/nrf5340dk_nrf5340_cpuapp.overlay'
+    include-dirs:
+     - 'C:/ncs/v3.2.1/nrf/include'
+     - 'C:/ncs/v3.2.1/nrf/dts/common'
+     - 'C:/ncs/v3.2.1/nrf/dts/riscv'
+     - 'C:/ncs/v3.2.1/nrf/dts/arm'
+     - 'C:/ncs/v3.2.1/nrf/dts'
+     - 'C:/Users/fdsan/Documents/GitHub/ProyectoSAC/dts'
+     - 'C:/ncs/v3.2.1/zephyr/include'
+     - 'C:/ncs/v3.2.1/zephyr/include/zephyr'
+     - 'C:/ncs/v3.2.1/zephyr/dts/common'
+     - 'C:/ncs/v3.2.1/zephyr/dts/vendor'
+     - 'C:/ncs/v3.2.1/zephyr/dts/rx'
+     - 'C:/ncs/v3.2.1/zephyr/dts/x86'
+     - 'C:/ncs/v3.2.1/zephyr/dts/xtensa'
+     - 'C:/ncs/v3.2.1/zephyr/dts/sparc'
+     - 'C:/ncs/v3.2.1/zephyr/dts/riscv'
+     - 'C:/ncs/v3.2.1/zephyr/dts/posix'
+     - 'C:/ncs/v3.2.1/zephyr/dts/arm64'
+     - 'C:/ncs/v3.2.1/zephyr/dts/arm'
+     - 'C:/ncs/v3.2.1/zephyr/dts/arc'
+     - 'C:/ncs/v3.2.1/zephyr/dts'
+    user-files:
+     - 'C:/Users/fdsan/Documents/GitHub/ProyectoSAC/boards/nrf5340dk_nrf5340_cpuapp.overlay'
+  kconfig:
+    files:
+     - 'C:/ncs/v3.2.1/zephyr/boards/nordic/nrf5340dk/nrf5340dk_nrf5340_cpuapp_defconfig'
+     - 'C:/Users/fdsan/Documents/GitHub/ProyectoSAC/prj.conf'
+     - 'C:/Users/fdsan/Documents/GitHub/ProyectoSAC/build/ProyectoSAC/zephyr/misc/generated/extra_kconfig_options.conf'
+     - 'C:/Users/fdsan/Documents/GitHub/ProyectoSAC/build/ProyectoSAC/zephyr/.config.sysbuild'
+    user-files:
+     - 'C:/Users/fdsan/Documents/GitHub/ProyectoSAC/prj.conf'
+  toolchain:
+    name: 'zephyr'
+    path: 'C:/ncs/toolchains/66cdf9b75e/opt/zephyr-sdk'
+  vendor-specific:
+    nordic:
+      svdfile: 'C:/ncs/v3.2.1/modules/hal/nordic/nrfx/bsp/stable/mdk/nrf5340_application.svd'
+  zephyr:
+    version: '4.2.99'
+    zephyr-base: 'C:/ncs/v3.2.1/zephyr'
+version: '0.1.0'
