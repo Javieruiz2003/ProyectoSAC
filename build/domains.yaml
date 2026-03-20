@@ -1,7 +1,0 @@
-default: ProyectoSAC
-build_dir: /Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build
-domains:
-  - name: ProyectoSAC
-    build_dir: /Users/javierruizhurtado/Documents/WorkspaceSAC/ProyectoSAC/build/ProyectoSAC
-flash_order:
-  - ProyectoSAC
