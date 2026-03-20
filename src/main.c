@@ -1,37 +1,58 @@
 #include <zephyr/kernel.h>
-#include <zephyr/device.h>
-#include <zephyr/drivers/spi.h>
 #include <zephyr/sys/printk.h>
-#include <zephyr/drivers/gpio.h>
-#include "ad5940/AD5940.h"
+#include "ad5940/ad5940.h"
 
-
-#define AD5940_NODE DT_NODELABEL(ad5940)
-
-#if !DT_NODE_HAS_STATUS(AD5940_NODE, okay)
-#error "No se encontró el nodo ad5940 en app.overlay"
-#endif
-
-static const struct spi_dt_spec ad5940_spi =
-    SPI_DT_SPEC_GET(AD5940_NODE,
-                    SPI_WORD_SET(8) | SPI_TRANSFER_MSB,
-                    0);
+int AD5940Port_Init(void);
 
 int main(void)
 {
+    uint32_t adiid;
+    uint32_t chipid;
+    uint32_t test;
+
     printk("Programa arrancado\n");
 
-    if (!spi_is_ready_dt(&ad5940_spi)) {
-        printk("SPI no está lista\n");
+    if (AD5940Port_Init() != 0) {
+        printk("Error inicializando puerto AD5940\n");
         return 0;
-    }else {
-        printk("SPI lista correctamente\n");
     }
 
-    
+    printk("Puerto AD5940 inicializado\n");
+
+    AD5940_RstClr();
+    k_msleep(50);
+    AD5940_RstSet();
+    k_msleep(50);
+
+    printk("Reset AD5940 hecho\n");
+
+    AD5940_Initialize();
+
+    adiid = AD5940_ReadReg(REG_AFECON_ADIID);
+    chipid = AD5940_ReadReg(REG_AFECON_CHIPID);
+
+    printk("ADIID  = 0x%08X\n", adiid);
+    printk("CHIPID = 0x%08X\n", chipid);
+
+    test = AD5940_ReadReg(REG_AFE_CALDATLOCK);
+    printk("CALDATLOCK antes  = 0x%08X\n", test);
+
+    AD5940_WriteReg(REG_AFE_CALDATLOCK, 0xDE87A5AF);
+
+    test = AD5940_ReadReg(REG_AFE_CALDATLOCK);
+    printk("CALDATLOCK despues = 0x%08X\n", test);
+
+
+    void AD5940_Main2(void);
+   
+
+    printf("Prueba");
+    AD5940_Main2();
+
+
+
 
     while (1) {
-        printk("Loop OK\n");
         k_msleep(2000);
     }
 

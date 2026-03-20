@@ -6,6 +6,19 @@ project(my_project)
 
 target_sources(app PRIVATE
     src/main.c
+<<<<<<< HEAD
     src/ad5940/ADICUP3029/AD5940PortZephyr.c
 
+=======
+    src/ad5940/ad5940.c
+    src/ad5940/AD5940Main.c
+    src/ad5940/BodyImpedance.c
+    src/ad5940/ad5940_port.c
+    src/AD5940_SPI.c
+>>>>>>> origin/RamaFran
+)
+
+target_include_directories(app PRIVATE
+    src
+    src/ad5940
 )
