@@ -11,7 +11,7 @@
 static const struct gpio_dt_spec ad5940_cs =
     GPIO_DT_SPEC_GET_BY_IDX(SPI4_NODE, cs_gpios, 0);
 
-static const struct device *rst= DEVICE_DT_GET(DT_NODELABEL(reset));
+static const struct device *rst = DEVICE_DT_GET(DT_NODELABEL(gpio0));
 void AD5940_CsClrZephyr(void)
 {
     if (!device_is_ready(ad5940_cs.port)) {
@@ -32,12 +32,12 @@ void AD5940_RstSet(void)
     if (!device_is_ready(rst)) {
         return;
     }
-    gpio_pin_set_dt(&rst, 1);  /* Pone RST en alto */
+    gpio_pin_set(&rst, 7,1);  /* Pone RST en alto */
 }
 void AD5940_RstReset(void)
 {
     if (!device_is_ready(rst)) {
         return;
     }
-    gpio_pin_set_dt(&rst, 1);  /* Pone RST en alto */
+    gpio_pin_set(&rst,7,1);  /* Pone RST en alto */
 }
