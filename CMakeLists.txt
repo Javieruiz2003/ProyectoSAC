@@ -10,6 +10,7 @@ target_sources(app PRIVATE
     src/ad5940/AD5940Main.c
     src/ad5940/BodyImpedance.c
     src/ad5940/ad5940_port.c
+    src/AD5940_SPI.c
 )
 
 target_include_directories(app PRIVATE
