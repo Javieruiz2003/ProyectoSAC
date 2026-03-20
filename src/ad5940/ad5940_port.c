@@ -5,25 +5,25 @@
 #include <zephyr/sys/printk.h>
 #include "ad5940.h"
 
-#define SPI_NODE   DT_NODELABEL(spi4)
+#define SPI_NODE   DT_NODELABEL(spi2)
 #define GPIO0_NODE DT_NODELABEL(gpio0)
 #define GPIO1_NODE DT_NODELABEL(gpio1)
 
 #if !DT_NODE_EXISTS(SPI_NODE)
-#error "El nodo spi4 no existe en devicetree"
+#error "El nodo spi2 no existe en devicetree"
 #endif
 
 #if !DT_NODE_HAS_STATUS(SPI_NODE, okay)
-#error "El nodo spi4 existe pero no está en estado okay"
+#error "El nodo spi2 existe pero no está en estado okay"
 #endif
 
-static const struct device *spi_dev = DEVICE_DT_GET(SPI_NODE);
+static const struct device *spi_dev   = DEVICE_DT_GET(SPI_NODE);
 static const struct device *gpio0_dev = DEVICE_DT_GET(GPIO0_NODE);
 static const struct device *gpio1_dev = DEVICE_DT_GET(GPIO1_NODE);
 
 static const struct spi_config spi_cfg = {
-    .frequency = 100000,
-    .operation = SPI_WORD_SET(8) | SPI_TRANSFER_MSB | SPI_MODE_CPOL | SPI_MODE_CPHA,
+    .frequency = 1000000,
+    .operation = SPI_OP_MODE_MASTER | SPI_WORD_SET(8) | SPI_TRANSFER_MSB,
     .slave = 0,
 };
 
@@ -59,13 +59,10 @@ void AD5940_ReadWriteNBytes(unsigned char *pSendBuffer,
                             unsigned char *pRecvBuff,
                             unsigned long length)
 {
+    int ret;
+
     struct spi_buf tx_buf = {
         .buf = pSendBuffer,
-        .len = length,
-    };
-
-    struct spi_buf rx_buf = {
-        .buf = pRecvBuff,
         .len = length,
     };
 
@@ -74,18 +71,36 @@ void AD5940_ReadWriteNBytes(unsigned char *pSendBuffer,
         .count = 1,
     };
 
+    struct spi_buf rx_buf = {
+        .buf = pRecvBuff,
+        .len = length,
+    };
+
     struct spi_buf_set rx = {
         .buffers = &rx_buf,
         .count = 1,
     };
 
-    (void)spi_transceive(spi_dev, &spi_cfg, &tx, &rx);
+    if (pSendBuffer && pRecvBuff) {
+        ret = spi_transceive(spi_dev, &spi_cfg, &tx, &rx);
+    } else if (pSendBuffer) {
+        ret = spi_write(spi_dev, &spi_cfg, &tx);
+    } else if (pRecvBuff) {
+        ret = spi_read(spi_dev, &spi_cfg, &rx);
+    } else {
+        printk("AD5940_ReadWriteNBytes: buffers NULL\n");
+        return;
+    }
+
+    if (ret) {
+        printk("spi error = %d, len = %lu\n", ret, length);
+    }
 }
 
 int AD5940Port_Init(void)
 {
     if (!device_is_ready(spi_dev)) {
-        printk("SPI4 no lista\n");
+        printk("SPI2 no lista\n");
         return -1;
     }
 
@@ -104,12 +119,13 @@ int AD5940Port_Init(void)
 
     return 0;
 }
+
 uint32_t AD5940_ClrMCUIntFlag(void)
 {
     return 0;
 }
+
 uint32_t AD5940_GetMCUIntFlag(void)
 {
     return 0;
 }
-
