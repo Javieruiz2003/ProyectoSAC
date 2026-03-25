@@ -3,6 +3,7 @@
  * Add your peripheral and pin configurations here.
  * See: https://docs.zephyrproject.org/latest/build/dts/howtos.html
  */
+
 &pinctrl {
     spi2_default: spi2_default {
         group1 {
@@ -27,12 +28,15 @@
     pinctrl-0 = <&spi2_default>;
     pinctrl-1 = <&spi2_sleep>;
     pinctrl-names = "default", "sleep";
+    cs-gpios = <&gpio1 12 GPIO_ACTIVE_LOW>; // CS = P1.12 
 
     ad5940: ad5940@0 {
         compatible = "adi,ad5940";
         reg = <0>;
-        spi-max-frequency = <1000000>;
+        spi-max-frequency = <4000000>;
     };
+
+    zephyr,deferred-init;
 };
 
 / {

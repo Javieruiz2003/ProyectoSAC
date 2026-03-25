@@ -1455,7 +1455,7 @@ zephyr_udc0: &usbd {
 
 
 &pinctrl {
-    spi4_default: spi4_default {
+    spi2_default: spi4_default {
         group1 {
             psels = <((((((1) * 32U) + (15)) & 0x1FFU) << 0U) | ((4U & 0xFFU) << 24U))>,
                     <((((((1) * 32U) + (13)) & 0x1FFU) << 0U) | ((5U & 0xFFU) << 24U))>,
@@ -1463,7 +1463,7 @@ zephyr_udc0: &usbd {
         };
     };
 
-    spi4_sleep: spi4_sleep {
+    spi2_sleep: spi4_sleep {
         group1 {
             psels = <((((((1) * 32U) + (15)) & 0x1FFU) << 0U) | ((4U & 0xFFU) << 24U))>,
                     <((((((1) * 32U) + (13)) & 0x1FFU) << 0U) | ((5U & 0xFFU) << 24U))>,
@@ -1473,7 +1473,7 @@ zephyr_udc0: &usbd {
     };
 };
 
-&spi4 {
+&spi2 {
     status = "okay";
     pinctrl-0 = <&spi4_default>;
     pinctrl-1 = <&spi4_sleep>;
@@ -1485,6 +1485,8 @@ zephyr_udc0: &usbd {
         reg = <0>;
         spi-max-frequency = <4000000>;
     };
+
+    zephyr,deferred-init;
 };
 
 / {

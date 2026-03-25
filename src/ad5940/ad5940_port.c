@@ -5,16 +5,16 @@
 #include <zephyr/sys/printk.h>
 #include "ad5940.h"
 
-#define SPI_NODE   DT_NODELABEL(spi2)
+#define SPI_NODE   DT_NODELABEL(spi4)
 #define GPIO0_NODE DT_NODELABEL(gpio0)
 #define GPIO1_NODE DT_NODELABEL(gpio1)
 
 #if !DT_NODE_EXISTS(SPI_NODE)
-#error "El nodo spi2 no existe en devicetree"
+#error "El nodo spi4 no existe en devicetree"
 #endif
 
 #if !DT_NODE_HAS_STATUS(SPI_NODE, okay)
-#error "El nodo spi2 existe pero no está en estado okay"
+#error "El nodo spi4 existe pero no está en estado okay"
 #endif
 
 static const struct device *spi_dev   = DEVICE_DT_GET(SPI_NODE);
