@@ -6,7 +6,7 @@ AppBIACfg_Type *pCfg = NULL;//esto es un puntero de la dirección donde se almac
 //la configuración 
 int AD5940Port_Init(void);
 AD5940Err err;
-
+uint32_t bufferLectura[512];
 int main(void)
 {
     uint32_t adiid;
@@ -58,9 +58,9 @@ err = AppBIAGetCfg(&pCfg);//aqui arrancamos y almacenamos en err el resultado
 //de la configuración, y en pCfg la dirección de la configuración
 if(err==AD5940ERR_OK && pCfg!=NULL){
 //comprobamos que la configuración ha sido correcta
-printk(pCfg->SinFreq);
+printk("frecuencia: %d", pCfg->SinFreq);
 }
-
+AppBIAInit(bufferLectura, sizeof(bufferLectura));
     while (1) {
         k_msleep(2000);
     }
