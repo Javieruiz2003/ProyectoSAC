@@ -4,16 +4,25 @@ cmake_minimum_required(VERSION 3.20.0)
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(my_project)
 
+target_compile_definitions(app PRIVATE
+    CONFIG_SPI=1
+    CONFIG_GPIO=1
+)
+
+target_compile_options(app PRIVATE
+    -Wno-error=double-promotion
+    -Wno-error=overflow
+    -Wno-error=maybe-uninitialized
+)
+
 target_sources(app PRIVATE
     src/main.c
-    src/ad5940/ADICUP3029/AD5940PortZephyr.c
     src/ad5940/ad5940.c
-    src/ad5940/AD5940Main.c
     src/ad5940/BodyImpedance.c
     src/ad5940/ad5940_port.c
     src/AD5940_SPI.c
-    src/ad5940/ADICUP3029/AD5940PortZephyr.c
     )
+
 
 target_include_directories(app PRIVATE
     src

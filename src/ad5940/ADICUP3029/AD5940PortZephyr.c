@@ -6,7 +6,7 @@
 
 
 /* Define el dispositivo GPIO y el pin CS */
-#define SPI4_NODE DT_NODELABEL(spi4)
+#define SPI4_NODE DT_NODELABEL(spi2)
 
 static const struct gpio_dt_spec ad5940_cs =
     GPIO_DT_SPEC_GET_BY_IDX(SPI4_NODE, cs_gpios, 0);
@@ -32,12 +32,12 @@ void AD5940_RstSet(void)
     if (!device_is_ready(rst)) {
         return;
     }
-    gpio_pin_set(&rst, 7,1);  /* Pone RST en alto */
+    gpio_pin_set(rst, 7, 1);  /* Pone RST en alto */
 }
 void AD5940_RstReset(void)
 {
     if (!device_is_ready(rst)) {
         return;
     }
-    gpio_pin_set(&rst,7,1);  /* Pone RST en alto */
+    gpio_pin_set(rst, 7, 1);  /* Pone RST en alto */
 }

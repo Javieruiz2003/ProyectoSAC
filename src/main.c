@@ -2,7 +2,6 @@
 #include <zephyr/sys/printk.h>
 #include "ad5940/ad5940.h"
 #include "ad5940/BodyImpedance.h"
-#include "ad5940/ADICUP3029/AD5940PortZephyr.c"
 AppBIACfg_Type *pCfg = NULL;//esto es un puntero de la dirección donde se almacenará
 //la configuración 
 int AD5940Port_Init(void);
@@ -34,6 +33,8 @@ int main(void)
 
     adiid = AD5940_ReadReg(REG_AFECON_ADIID);
     chipid = AD5940_ReadReg(REG_AFECON_CHIPID);
+    (void)adiid;
+    (void)chipid;
 /*
     printk("ADIID  = 0x%08X\n", adiid);
     printk("CHIPID = 0x%08X\n", chipid);

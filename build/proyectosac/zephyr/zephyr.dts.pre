@@ -1455,7 +1455,7 @@ zephyr_udc0: &usbd {
 
 
 &pinctrl {
-    spi2_default: spi4_default {
+    spi2_default: spi2_default {
         group1 {
             psels = <((((((1) * 32U) + (15)) & 0x1FFU) << 0U) | ((4U & 0xFFU) << 24U))>,
                     <((((((1) * 32U) + (13)) & 0x1FFU) << 0U) | ((5U & 0xFFU) << 24U))>,
@@ -1463,7 +1463,7 @@ zephyr_udc0: &usbd {
         };
     };
 
-    spi2_sleep: spi4_sleep {
+    spi2_sleep: spi2_sleep {
         group1 {
             psels = <((((((1) * 32U) + (15)) & 0x1FFU) << 0U) | ((4U & 0xFFU) << 24U))>,
                     <((((((1) * 32U) + (13)) & 0x1FFU) << 0U) | ((5U & 0xFFU) << 24U))>,
@@ -1475,8 +1475,8 @@ zephyr_udc0: &usbd {
 
 &spi2 {
     status = "okay";
-    pinctrl-0 = <&spi4_default>;
-    pinctrl-1 = <&spi4_sleep>;
+    pinctrl-0 = <&spi2_default>;
+    pinctrl-1 = <&spi2_sleep>;
     pinctrl-names = "default", "sleep";
     cs-gpios = <&gpio1 12 (1 << 0)>;
 
@@ -1493,6 +1493,14 @@ zephyr_udc0: &usbd {
     aliases {
         ad5940 = &ad5940;
     };
+};
+
+&spi2 {
+    status = "okay";
+};
+
+&spi4 {
+    status = "disabled";
 };
 # 0 "<command-line>" 2
 # 1 "C:/ncs/v3.2.2/zephyr/misc/empty_file.c"
