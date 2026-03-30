@@ -39,6 +39,6 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/modules/cmsis_6/cmsis_6/CMSIS/Core/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/modules/cmsis_6/cmsis_6/CMSIS/Core/cmake_install.cmake")
 endif()
 

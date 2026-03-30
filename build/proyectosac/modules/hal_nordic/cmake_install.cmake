@@ -39,11 +39,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/modules/hal_nordic/modules/hal_nordic/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/modules/hal_nordic/modules/hal_nordic/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/modules/hal_nordic/nrfx/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/modules/hal_nordic/nrfx/cmake_install.cmake")
 endif()
 

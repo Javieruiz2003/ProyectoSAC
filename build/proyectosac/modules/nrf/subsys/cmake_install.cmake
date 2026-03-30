@@ -39,41 +39,41 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/modules/nrf/subsys/net/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/modules/nrf/subsys/net/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/modules/nrf/subsys/dfu/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/modules/nrf/subsys/dfu/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/modules/nrf/subsys/mpsl/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/modules/nrf/subsys/mpsl/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/modules/nrf/subsys/logging/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/modules/nrf/subsys/logging/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/modules/nrf/subsys/shell/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/modules/nrf/subsys/shell/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/modules/nrf/subsys/debug/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/modules/nrf/subsys/debug/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/modules/nrf/subsys/partition_manager/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/modules/nrf/subsys/partition_manager/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/modules/nrf/subsys/mgmt/mcumgr/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/modules/nrf/subsys/mgmt/mcumgr/cmake_install.cmake")
 endif()
 

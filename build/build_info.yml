@@ -8,15 +8,15 @@ cmake:
     qualifiers: 'nrf5340/cpuapp'
     revision: ''
   images:
-   - name: 'proyectosac'
-     source-dir: 'C:/Users/rafac/Documents/proyectosac'
+   - name: 'ProyectoSAC'
+     source-dir: 'C:/Users/rafac/Documents/ProyectoSAC'
      type: 'MAIN'
   kconfig:
     files:
-     - 'C:/Users/rafac/Documents/proyectosac/build/_sysbuild/empty.conf'
-     - 'C:/Users/rafac/Documents/proyectosac/build/_sysbuild/empty.conf'
+     - 'C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/empty.conf'
+     - 'C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/empty.conf'
     user-files:
-     - 'C:/Users/rafac/Documents/proyectosac/build/_sysbuild/empty.conf'
+     - 'C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/empty.conf'
   sysbuild: 'true'
 version: '0.1.0'
 west:

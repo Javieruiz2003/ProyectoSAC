@@ -1,13 +1,13 @@
 # Target labels
- proyectosac
+ ProyectoSAC
 # Source files and their labels
-C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/CMakeFiles/proyectosac
-C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/CMakeFiles/proyectosac.rule
-C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/CMakeFiles/proyectosac-complete.rule
-C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-build.rule
-C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-configure.rule
-C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-download.rule
-C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-install.rule
-C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-mkdir.rule
-C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-patch.rule
-C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-update.rule
+C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/CMakeFiles/ProyectoSAC
+C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/CMakeFiles/ProyectoSAC.rule
+C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/CMakeFiles/ProyectoSAC-complete.rule
+C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-build.rule
+C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-configure.rule
+C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-download.rule
+C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-install.rule
+C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-mkdir.rule
+C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-patch.rule
+C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-update.rule

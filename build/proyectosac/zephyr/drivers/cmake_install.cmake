@@ -39,71 +39,71 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/zephyr/drivers/disk/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/zephyr/drivers/disk/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/zephyr/drivers/firmware/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/zephyr/drivers/firmware/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/zephyr/drivers/interrupt_controller/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/zephyr/drivers/interrupt_controller/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/zephyr/drivers/misc/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/zephyr/drivers/misc/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/zephyr/drivers/pcie/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/zephyr/drivers/pcie/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/zephyr/drivers/usb/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/zephyr/drivers/usb/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/zephyr/drivers/usb_c/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/zephyr/drivers/usb_c/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/zephyr/drivers/clock_control/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/zephyr/drivers/clock_control/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/zephyr/drivers/console/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/zephyr/drivers/console/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/zephyr/drivers/gpio/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/zephyr/drivers/gpio/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/zephyr/drivers/pinctrl/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/zephyr/drivers/pinctrl/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/zephyr/drivers/serial/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/zephyr/drivers/serial/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/zephyr/drivers/spi/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/zephyr/drivers/spi/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/zephyr/drivers/timer/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/zephyr/drivers/timer/cmake_install.cmake")
 endif()
 

@@ -58,16 +58,8 @@ int main(void)
 //arranque de bioimpedance
 err = AppBIAGetCfg(&pCfg);//aqui arrancamos y almacenamos en err el resultado
 //de la configuración, y en pCfg la dirección de la configuración
-if(err==AD5940ERR_OK && pCfg!=NULL){
-//comprobamos que la configuración ha sido correcta
-    int AD5940Port_Init(void);
-printk("frecuencia: %d Hz\n", (int)pCfg->SinFreq);
-}
-AppBIAInit(bufferLectura, sizeof(bufferLectura));
-AppBIACtrl(BIACTRL_START, NULL);
 
     while (1) {
-        printk("bufferLectura[0] = %d\n", bufferLectura[0]);
         k_msleep(2000);
     }
 

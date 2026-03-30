@@ -1,5 +1,5 @@
 @echo off
-cd /D C:\Users\rafac\Documents\proyectosac\build\_sysbuild || (set FAIL_LINE=2& goto :ABORT)
+cd /D C:\Users\rafac\Documents\ProyectoSAC\build\_sysbuild || (set FAIL_LINE=2& goto :ABORT)
 C:\ncs\toolchains\c717907b94\opt\bin\cmake.exe -E echo abrobot_sh1106_72x40 || (set FAIL_LINE=3& goto :ABORT)
 C:\ncs\toolchains\c717907b94\opt\bin\cmake.exe -E echo adafruit_24lc32 || (set FAIL_LINE=4& goto :ABORT)
 C:\ncs\toolchains\c717907b94\opt\bin\cmake.exe -E echo adafruit_2_8_tft_touch_v2 || (set FAIL_LINE=5& goto :ABORT)

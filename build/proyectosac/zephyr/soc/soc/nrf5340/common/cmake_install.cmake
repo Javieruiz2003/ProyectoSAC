@@ -39,6 +39,6 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/rafac/Documents/proyectosac/build/proyectosac/zephyr/soc/soc/nrf5340/common/uicr/cmake_install.cmake")
+  include("C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC/zephyr/soc/soc/nrf5340/common/uicr/cmake_install.cmake")
 endif()
 

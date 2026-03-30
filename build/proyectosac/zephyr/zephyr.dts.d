@@ -35,4 +35,4 @@ empty_file.o: C:/ncs/v3.2.2/zephyr/misc/empty_file.c \
  C:/ncs/v3.2.2/zephyr/dts/vendor/nordic/nrf5340_cpuapp_partition.dtsi \
  C:/ncs/v3.2.2/zephyr/dts/vendor/nordic/nrf5340_sram_partition.dtsi \
  C:/ncs/v3.2.2/zephyr/dts/vendor/nordic/nrf5340_shared_sram_partition.dtsi \
- C:/Users/rafac/Documents/proyectosac/boards/nrf5340dk_nrf5340_cpuapp.overlay
+ C:/Users/rafac/Documents/ProyectoSAC/boards/nrf5340dk_nrf5340_cpuapp.overlay

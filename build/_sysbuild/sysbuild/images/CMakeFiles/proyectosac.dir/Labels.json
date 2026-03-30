@@ -2,42 +2,42 @@
 	"sources" : 
 	[
 		{
-			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/CMakeFiles/proyectosac"
+			"file" : "C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/CMakeFiles/ProyectoSAC"
 		},
 		{
-			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/CMakeFiles/proyectosac.rule"
+			"file" : "C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/CMakeFiles/ProyectoSAC.rule"
 		},
 		{
-			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/CMakeFiles/proyectosac-complete.rule"
+			"file" : "C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/CMakeFiles/ProyectoSAC-complete.rule"
 		},
 		{
-			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-build.rule"
+			"file" : "C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-build.rule"
 		},
 		{
-			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-configure.rule"
+			"file" : "C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-configure.rule"
 		},
 		{
-			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-download.rule"
+			"file" : "C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-download.rule"
 		},
 		{
-			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-install.rule"
+			"file" : "C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-install.rule"
 		},
 		{
-			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-mkdir.rule"
+			"file" : "C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-mkdir.rule"
 		},
 		{
-			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-patch.rule"
+			"file" : "C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-patch.rule"
 		},
 		{
-			"file" : "C:/Users/rafac/Documents/proyectosac/build/_sysbuild/sysbuild/images/proyectosac-prefix/src/proyectosac-stamp/proyectosac-update.rule"
+			"file" : "C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/sysbuild/images/ProyectoSAC-prefix/src/ProyectoSAC-stamp/ProyectoSAC-update.rule"
 		}
 	],
 	"target" : 
 	{
 		"labels" : 
 		[
-			"proyectosac"
+			"ProyectoSAC"
 		],
-		"name" : "proyectosac"
+		"name" : "ProyectoSAC"
 	}
 }

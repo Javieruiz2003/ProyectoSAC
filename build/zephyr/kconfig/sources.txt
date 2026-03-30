@@ -1,8 +1,8 @@
-C:\Users\rafac\Documents\proyectosac\build\Kconfig\Kconfig.sysbuild.modules
-C:\Users\rafac\Documents\proyectosac\build\Kconfig\boards\Kconfig.nrf5340dk
-C:\Users\rafac\Documents\proyectosac\build\Kconfig\boards\Kconfig.sysbuild
-C:\Users\rafac\Documents\proyectosac\build\Kconfig\soc\Kconfig.soc
-C:\Users\rafac\Documents\proyectosac\build\Kconfig\soc\Kconfig.sysbuild
+C:\Users\rafac\Documents\ProyectoSAC\build\Kconfig\Kconfig.sysbuild.modules
+C:\Users\rafac\Documents\ProyectoSAC\build\Kconfig\boards\Kconfig.nrf5340dk
+C:\Users\rafac\Documents\ProyectoSAC\build\Kconfig\boards\Kconfig.sysbuild
+C:\Users\rafac\Documents\ProyectoSAC\build\Kconfig\soc\Kconfig.soc
+C:\Users\rafac\Documents\ProyectoSAC\build\Kconfig\soc\Kconfig.sysbuild
 C:\ncs\v3.2.2\nrf\soc\nordic\Kconfig.soc
 C:\ncs\v3.2.2\nrf\soc\nordic\Kconfig.sysbuild
 C:\ncs\v3.2.2\nrf\soc\nordic\common\vpr\Kconfig.sysbuild

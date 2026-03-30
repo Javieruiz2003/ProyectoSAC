@@ -6,15 +6,15 @@ cmake:
     qualifiers: 'nrf5340/cpuapp'
     revision: ''
   images:
-   - name: 'proyectosac'
-     source-dir: 'C:/Users/rafac/Documents/proyectosac'
+   - name: 'ProyectoSAC'
+     source-dir: 'C:/Users/rafac/Documents/ProyectoSAC'
      type: 'MAIN'
   kconfig:
     files:
-     - 'C:/Users/rafac/Documents/proyectosac/build/_sysbuild/empty.conf'
-     - 'C:/Users/rafac/Documents/proyectosac/build/_sysbuild/empty.conf'
+     - 'C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/empty.conf'
+     - 'C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/empty.conf'
     user-files:
-     - 'C:/Users/rafac/Documents/proyectosac/build/_sysbuild/empty.conf'
+     - 'C:/Users/rafac/Documents/ProyectoSAC/build/_sysbuild/empty.conf'
 version: '0.1.0'
 west:
   command: 'C:\ncs\toolchains\c717907b94\opt\bin\Scripts\west build --build-dir c:/Users/rafac/Documents/proyectosac/build c:/Users/rafac/Documents/proyectosac --pristine --board nrf5340dk/nrf5340/cpuapp -- -DDEBUG_THREAD_INFO=On -DCONFIG_DEBUG_THREAD_INFO=y -Dproyectosac_DEBUG_THREAD_INFO=On'

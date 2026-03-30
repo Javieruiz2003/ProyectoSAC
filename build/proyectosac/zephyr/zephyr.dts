@@ -42,7 +42,7 @@
 		mcuboot-led0 = &led0;       /* in zephyr\boards\nordic\nrf5340dk\nrf5340dk_common.dtsi:102 */
 		pwm-led0 = &pwm_led0;       /* in zephyr\boards\nordic\nrf5340dk\nrf5340_cpuapp_common.dtsi:53 */
 		watchdog0 = &wdt0;          /* in zephyr\boards\nordic\nrf5340dk\nrf5340_cpuapp_common.dtsi:54 */
-		ad5940 = &ad5940;           /* in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:44 */
+		ad5940 = &ad5940;           /* in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:44 */
 	};
 
 	/* node '/soc' defined in zephyr\dts\arm\armv8-m.dtsi:6 */
@@ -321,7 +321,7 @@
 				pinctrl-1 = < &spi4_sleep >;             /* in zephyr\boards\nordic\nrf5340dk\nrf5340_cpuapp_common.dtsi:161 */
 				pinctrl-names = "default",
 				                "sleep";                 /* in zephyr\boards\nordic\nrf5340dk\nrf5340_cpuapp_common.dtsi:162 */
-				status = "disabled";                     /* in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:53 */
+				status = "disabled";                     /* in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:53 */
 			};
 
 			/* node '/soc/peripheral@50000000/i2c@b000' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:203 */
@@ -345,19 +345,19 @@
 				interrupts = < 0xb 0x1 >;       /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:231 */
 				max-frequency = < 0x7a1200 >;   /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:232 */
 				easydma-maxcnt-bits = < 0x10 >; /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:233 */
-				pinctrl-0 = < &spi2_default >;  /* in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:28 */
-				pinctrl-1 = < &spi2_sleep >;    /* in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:29 */
+				pinctrl-0 = < &spi2_default >;  /* in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:28 */
+				pinctrl-1 = < &spi2_sleep >;    /* in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:29 */
 				pinctrl-names = "default",
-				                "sleep";        /* in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:30 */
-				cs-gpios = < &gpio1 0xc 0x1 >;  /* in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:31 */
-				zephyr,deferred-init;           /* in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:39 */
-				status = "okay";                /* in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:49 */
+				                "sleep";        /* in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:30 */
+				cs-gpios = < &gpio1 0xc 0x1 >;  /* in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:31 */
+				zephyr,deferred-init;           /* in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:39 */
+				status = "okay";                /* in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:49 */
 
-				/* node '/soc/peripheral@50000000/spi@b000/ad5940@0' defined in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:33 */
+				/* node '/soc/peripheral@50000000/spi@b000/ad5940@0' defined in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:33 */
 				ad5940: ad5940@0 {
-					compatible = "adi,ad5940";        /* in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:34 */
-					reg = < 0x0 >;                    /* in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:35 */
-					spi-max-frequency = < 0x3d0900 >; /* in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:36 */
+					compatible = "adi,ad5940";        /* in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:34 */
+					reg = < 0x0 >;                    /* in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:35 */
+					spi-max-frequency = < 0x3d0900 >; /* in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:36 */
 				};
 			};
 
@@ -790,7 +790,7 @@
 				port = < 0x1 >;                 /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:576 */
 				gpiote-instance = < &gpiote >;  /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:577 */
 				status = "okay";                /* in zephyr\boards\nordic\nrf5340dk\nrf5340_cpuapp_common.dtsi:92 */
-				phandle = < 0x10 >;             /* in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:31 */
+				phandle = < 0x10 >;             /* in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:31 */
 			};
 
 			/* node '/soc/peripheral@50000000/ieee802154' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:580 */
@@ -1040,28 +1040,28 @@
 			};
 		};
 
-		/* node '/pin-controller/spi2_default' defined in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:8 */
+		/* node '/pin-controller/spi2_default' defined in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:8 */
 		spi2_default: spi2_default {
-			phandle = < 0xe >; /* in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:28 */
+			phandle = < 0xe >; /* in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:28 */
 
-			/* node '/pin-controller/spi2_default/group1' defined in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:9 */
+			/* node '/pin-controller/spi2_default/group1' defined in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:9 */
 			group1 {
 				psels = < 0x400002f >,
 				        < 0x500002d >,
-				        < 0x600002e >; /* in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:10 */
+				        < 0x600002e >; /* in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:10 */
 			};
 		};
 
-		/* node '/pin-controller/spi2_sleep' defined in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:16 */
+		/* node '/pin-controller/spi2_sleep' defined in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:16 */
 		spi2_sleep: spi2_sleep {
-			phandle = < 0xf >; /* in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:29 */
+			phandle = < 0xf >; /* in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:29 */
 
-			/* node '/pin-controller/spi2_sleep/group1' defined in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:17 */
+			/* node '/pin-controller/spi2_sleep/group1' defined in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:17 */
 			group1 {
 				psels = < 0x400002f >,
 				        < 0x500002d >,
-				        < 0x600002e >; /* in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:18 */
-				low-power-enable;      /* in ..\..\Users\rafac\Documents\proyectosac\boards\nrf5340dk_nrf5340_cpuapp.overlay:21 */
+				        < 0x600002e >; /* in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:18 */
+				low-power-enable;      /* in ..\..\Users\rafac\Documents\ProyectoSAC\boards\nrf5340dk_nrf5340_cpuapp.overlay:21 */
 			};
 		};
 	};

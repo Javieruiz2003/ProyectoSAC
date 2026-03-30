@@ -1,7 +1,7 @@
-default: proyectosac
-build_dir: C:/Users/rafac/Documents/proyectosac/build
+default: ProyectoSAC
+build_dir: C:/Users/rafac/Documents/ProyectoSAC/build
 domains:
-  - name: proyectosac
-    build_dir: C:/Users/rafac/Documents/proyectosac/build/proyectosac
+  - name: ProyectoSAC
+    build_dir: C:/Users/rafac/Documents/ProyectoSAC/build/ProyectoSAC
 flash_order:
-  - proyectosac
+  - ProyectoSAC
