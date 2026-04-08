@@ -16,3 +16,4 @@ target_include_directories(app PRIVATE
     src
     src/ad5940
 )
+
