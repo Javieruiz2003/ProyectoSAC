@@ -4,11 +4,6 @@ cmake_minimum_required(VERSION 3.20.0)
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(my_project)
 
-target_compile_definitions(app PRIVATE
-    CONFIG_SPI=1
-    CONFIG_GPIO=1
-)
-
 target_compile_options(app PRIVATE
     -Wno-error=double-promotion
     -Wno-error=overflow

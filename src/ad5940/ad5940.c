@@ -3216,6 +3216,8 @@ AD5940Err AD5940_ADCPGACal(ADCPGACal_Type *pADCPGACal)
         HSDACCode = 0x800 + 0x300;  /* 0x300--> 0x300/0x1000*0.8*BUFFERGAIN2 = 0.3V. */
       else if(pADCPGACal->ADCPga == ADCPGA_9)
         HSDACCode = 0x800 + 0x155;  /* 0x155--> 0x155/0x1000*0.8*BUFFERGAIN2 = 0.133V. */
+      else
+        HSDACCode = 0x800;  /* Default value */
       hsloop_cfg.WgCfg.WgCode = HSDACCode;
       AD5940_HSLoopCfgS(&hsloop_cfg);
 
@@ -3413,8 +3415,8 @@ AD5940Err AD5940_HSRtiaCal(HSRTIACal_Type *pCalCfg, void *pResult)
   float ExcitVolt; /* Excitation voltage, unit is mV */
   uint32_t RtiaVal;
   uint32_t const HpRtiaTable[]={200,1000,5000,10000,20000,40000,80000,160000,0};
-  uint32_t const HSTIADERLOADTable[]={0,10,30,50,100,999999999999};
-  uint32_t const HSTIADERTIATable[] = {50,100,200,1000,5000,10000,20000,40000,80000,160000,0,999999999999999};
+  uint32_t const HSTIADERLOADTable[]={0,10,30,50,100,0xFFFFFFFFu};
+  uint32_t const HSTIADERTIATable[] = {50,100,200,1000,5000,10000,20000,40000,80000,160000,0,0xFFFFFFFFu};
   uint32_t WgAmpWord;
 
   iImpCar_Type DftRcalVolt, DftRtiaVolt;

@@ -13,7 +13,7 @@ Analog Devices Software License Agreement.
 
 *****************************************************************************/
 
-#include <AD5940.h>
+#include "../ad5940.h"
 #include "ADuCM3029.h"
 
 #define SYSTICK_MAXCOUNT ((1L<<24)-1) /* we use Systick to complete function Delay10uS(). This value only applies to ADICUP3029 board. */

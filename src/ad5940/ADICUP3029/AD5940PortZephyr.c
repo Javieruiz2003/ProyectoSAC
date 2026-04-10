@@ -5,6 +5,7 @@
 #include <zephyr/drivers/gpio.h>
 
 
+
 /* Define el dispositivo GPIO y el pin CS */
 #define SPI4_NODE DT_NODELABEL(spi2)
 
