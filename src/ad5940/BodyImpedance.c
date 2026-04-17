@@ -1,8 +1,10 @@
 /*!
  *****************************************************************************
  @file:    BodyComposition.c
- @author:  Neo Xu
- @brief:   BIA measurement sequences.
+ @author:  $Author: nxu2 $
+ @brief:   BIA measurment sequences.
+ @version: $Revision: 766 $
+ @date:    $Date: 2017-08-21 14:09:35 +0100 (Mon, 21 Aug 2017) $
  -----------------------------------------------------------------------------
 Copyright (c) 2017-2019 Analog Devices, Inc. All Rights Reserved.
 This software is proprietary to Analog Devices, Inc. and its licensors.
@@ -11,6 +13,10 @@ Analog Devices Software License Agreement.
  
 *****************************************************************************/
 #include "BodyImpedance.h"
+#include "ble_common.h"
+#include "debug_config.h"
+
+/* This file contains auto generated source code that user defined */
 
 /* 
   Application configuration structure. Specified by user from template.
@@ -31,8 +37,8 @@ AppBIACfg_Type AppBIACfg =
   .WuptClkFreq = 32000.0,
   .AdcClkFreq = 16000000.0,
   .BiaODR = 20.0, /* 20.0 Hz*/
-  .NumOfData = -1,
-  .RcalVal = 10000.0, /* 10kOhm */
+  .NumOfData = DEFAULT_SWEEP_POINTS, /* DEFAULT_SWEEP_POINTS = 1 barrido completo, -1 = never stop */
+  .RcalVal = 30.0, /* 30 Ohm */
 
   .PwrMod = AFEPWR_LP,
   .HstiaRtiaSel = HSTIARTIA_1K,
@@ -52,10 +58,10 @@ AppBIACfg_Type AppBIACfg =
   .DftSrc = DFTSRC_SINC3,
   .HanWinEn = bTRUE,
 
-  .SweepCfg.SweepEn = bFALSE,
-  .SweepCfg.SweepStart = 10000,
-  .SweepCfg.SweepStop = 150000.0,
-  .SweepCfg.SweepPoints = 100,
+  .SweepCfg.SweepEn = bTRUE, /* Activado por defecto */
+  .SweepCfg.SweepStart = 4000, /* 4 kHz */
+  .SweepCfg.SweepStop = 198000.0, /* 198 kHz */
+  .SweepCfg.SweepPoints = DEFAULT_SWEEP_POINTS, /* puntos de frecuencia */
   .SweepCfg.SweepLog = bTRUE,
   .SweepCfg.SweepIndex = 0,
 
@@ -127,7 +133,7 @@ AD5940Err AppBIACtrl(int32_t BcmCtrl, void *pPara)
     break;
     case BIACTRL_SHUTDOWN:
     {
-      AppBIACtrl(BIACTRL_STOPNOW, 0);  /* Stop the measurement if it's running. */
+      AppBIACtrl(BIACTRL_STOPNOW, 0);  /* Stop the measurment if it's running. */
       /* Turn off LPloop related blocks which are not controlled automatically by sleep operation */
       AFERefCfg_Type aferef_cfg;
       LPLoopCfg_Type lp_loop;
@@ -171,7 +177,7 @@ static AD5940Err AppBIASeqCfgGen(void)
   aferef_cfg.Hp1V8Ilimit = bFALSE;
   aferef_cfg.Lp1V1BuffEn = bFALSE;
   aferef_cfg.Lp1V8BuffEn = bFALSE;
-  /* LP reference control - turn off them to save power*/
+  /* LP reference control - turn off them to save powr*/
   aferef_cfg.LpBandgapEn = bTRUE;
   aferef_cfg.LpRefBufEn = bTRUE;
   aferef_cfg.LpRefBoostEn = bFALSE;
@@ -232,7 +238,7 @@ static AD5940Err AppBIASeqCfgGen(void)
   lp_loop.LpAmpCfg.LpTiaRf = LPTIARF_20K;
   lp_loop.LpAmpCfg.LpTiaRload = LPTIARLOAD_SHORT;
   lp_loop.LpAmpCfg.LpTiaRtia = LPTIARTIA_OPEN;
-  lp_loop.LpAmpCfg.LpTiaSW = LPTIASW(5)|LPTIASW(6)|LPTIASW(7)|LPTIASW(8)|LPTIASW(9)|LPTIASW(12)|LPTIASW(13); /** @todo Optimization needed for new silicon */
+  lp_loop.LpAmpCfg.LpTiaSW = LPTIASW(5)|LPTIASW(6)|LPTIASW(7)|LPTIASW(8)|LPTIASW(9)|LPTIASW(12)|LPTIASW(13); /* @todo Optimizanation needed for new silicon */
   AD5940_LPLoopCfgS(&lp_loop);
 
   dsp_cfg.ADCBaseCfg.ADCMuxN = ADCMUXN_HSTIA_N;
@@ -241,13 +247,17 @@ static AD5940Err AppBIASeqCfgGen(void)
   
   memset(&dsp_cfg.ADCDigCompCfg, 0, sizeof(dsp_cfg.ADCDigCompCfg));
   
-  dsp_cfg.ADCFilterCfg.ADCAvgNum = ADCAVGNUM_16;  /* Don't care because it's disabled */
+  dsp_cfg.ADCFilterCfg.ADCAvgNum = ADCAVGNUM_16;  /* Don't care becase it's disabled */
   dsp_cfg.ADCFilterCfg.ADCRate = ADCRATE_800KHZ;	/* Tell filter block clock rate of ADC*/
   dsp_cfg.ADCFilterCfg.ADCSinc2Osr = AppBIACfg.ADCSinc2Osr;
   dsp_cfg.ADCFilterCfg.ADCSinc3Osr = AppBIACfg.ADCSinc3Osr;
   dsp_cfg.ADCFilterCfg.BpSinc3 = bFALSE;
   dsp_cfg.ADCFilterCfg.BpNotch = bTRUE;
   dsp_cfg.ADCFilterCfg.Sinc2NotchEnable = bTRUE;
+  dsp_cfg.ADCFilterCfg.Sinc2NotchClkEnable = bTRUE;
+  dsp_cfg.ADCFilterCfg.Sinc3ClkEnable = bTRUE;
+  dsp_cfg.ADCFilterCfg.WGClkEnable = bTRUE;
+  dsp_cfg.ADCFilterCfg.DFTClkEnable = bTRUE;
   dsp_cfg.DftCfg.DftNum = AppBIACfg.DftNum;
   dsp_cfg.DftCfg.DftSrc = AppBIACfg.DftSrc;
   dsp_cfg.DftCfg.HanWinEn = AppBIACfg.HanWinEn;
@@ -262,11 +272,11 @@ static AD5940Err AppBIASeqCfgGen(void)
   AD5940_SEQGpioCtrlS(0/*AGPIO_Pin6|AGPIO_Pin5|AGPIO_Pin1*/);        //GP6->endSeq, GP5 -> AD8233=OFF, GP1->RLD=OFF .
   
   /* Sequence end. */
-  AD5940_SEQGenInsert(SEQ_STOP()); /* Add one extra command to disable sequencer for initialization sequence because we only want it to run one time. */
+  AD5940_SEQGenInsert(SEQ_STOP()); /* Add one extral command to disable sequencer for initialization sequence because we only want it to run one time. */
 
   /* Stop here */
   error = AD5940_SEQGenFetchSeq(&pSeqCmd, &SeqLen);
-  AD5940_SEQGenCtrl(bFALSE); /* Stop sequencer generator */
+  AD5940_SEQGenCtrl(bFALSE); /* Stop seuqncer generator */
   if(error == AD5940ERR_OK)
   {
     AppBIACfg.InitSeqInfo.SeqId = SEQID_1;
@@ -336,7 +346,7 @@ static AD5940Err AppBIASeqMeasureGen(void)
   AD5940_EnterSleepS();/* Goto hibernate */
   /* Sequence end. */
   error = AD5940_SEQGenFetchSeq(&pSeqCmd, &SeqLen);
-  AD5940_SEQGenCtrl(bFALSE); /* Stop sequencer generator */
+  AD5940_SEQGenCtrl(bFALSE); /* Stop seuqncer generator */
 
   AppBIACfg.MeasSeqCycleCount = AD5940_SEQCycleTime();
   AppBIACfg.MaxODR = 1/(((AppBIACfg.MeasSeqCycleCount + 10) / 16.0)* 1E-6)  ;
@@ -390,10 +400,7 @@ static AD5940Err AppBIARtiaCal(void)
     for(i=0;i<AppBIACfg.SweepCfg.SweepPoints;i++)
     {
 			AD5940_HSRtiaCal(&hsrtia_cal, AppBIACfg.RtiaCalTable[i]);
-#ifdef ADI_DEBUG
-      ADI_Print("Freq:%.2f, RTIA: Mag:%f Ohm, Phase:%.3f\n", hsrtia_cal.fFreq, AppBIACfg.RtiaCalTable[i][0], AppBIACfg.RtiaCalTable[i][1]);
-#endif
-      AD5940_SweepNext(&AppBIACfg.SweepCfg, &hsrtia_cal.fFreq);     
+      AD5940_SweepNext(&AppBIACfg.SweepCfg, &hsrtia_cal.fFreq);
     }
     AppBIACfg.SweepCfg.SweepIndex = 0;  /* Reset index */
     AppBIACfg.RtiaCurrValue[0] = AppBIACfg.RtiaCalTable[AppBIACfg.SweepCfg.SweepIndex][0];
@@ -428,12 +435,15 @@ AD5940Err AppBIAInit(uint32_t *pBuffer, uint32_t BufferSize)
   AD5940_SEQCfg(&seq_cfg);
 
   /* Do RTIA calibration */
-  
   if((AppBIACfg.ReDoRtiaCal == bTRUE) || \
       AppBIACfg.BIAInited == bFALSE)  /* Do calibration on the first initializaion */
   {
     AppBIARtiaCal();
     AppBIACfg.ReDoRtiaCal = bFALSE;
+    /* Defensive: restore INTC config in case calibration's read-modify-write
+       was affected by a SPI glitch. Cost: 2 SPI writes, no delay. */
+    AD5940_INTCCfg(AFEINTC_1, AFEINTSRC_ALLINT, bTRUE);
+    AD5940_INTCCfg(AFEINTC_0, AFEINTSRC_DATAFIFOTHRESH, bTRUE);
   }
   /* Reconfigure FIFO */
   AD5940_FIFOCtrlS(FIFOSRC_DFT, bFALSE);									/* Disable FIFO firstly */
@@ -474,7 +484,7 @@ AD5940Err AppBIAInit(uint32_t *pBuffer, uint32_t BufferSize)
   AD5940_SEQMmrTrig(AppBIACfg.InitSeqInfo.SeqId);
   while(AD5940_INTCTestFlag(AFEINTC_1, AFEINTSRC_ENDSEQ) == bFALSE);
   
-  /* Measurement sequence  */
+  /* Measurment sequence  */
   AppBIACfg.MeasureSeqInfo.WriteSRAM = bFALSE;
   AD5940_SEQInfoCfg(&AppBIACfg.MeasureSeqInfo);
 
@@ -489,6 +499,7 @@ AD5940Err AppBIAInit(uint32_t *pBuffer, uint32_t BufferSize)
 }
 
 /* Modify registers when AFE wakeup */
+uint8_t BIAend = 0;
 static AD5940Err AppBIARegModify(int32_t * const pData, uint32_t *pDataCount)
 {
   if(AppBIACfg.NumOfData > 0)
@@ -496,7 +507,12 @@ static AD5940Err AppBIARegModify(int32_t * const pData, uint32_t *pDataCount)
     AppBIACfg.FifoDataCount += *pDataCount/4;
     if(AppBIACfg.FifoDataCount >= AppBIACfg.NumOfData)
     {
+      DEBUG_PRINT("=== AD5940 MEASUREMENT SEQUENCE COMPLETE ===\n");
+      DEBUG_PRINT("Total data points collected: %d\n", (int)AppBIACfg.FifoDataCount);
+      DEBUG_PRINT("Setting BIAend = 1, stopping AD5940 wake-up timer\n");
+      BIAend = 1;
       AD5940_WUPTCtrl(bFALSE);
+      DEBUG_PRINT("AD5940 now in idle state\n");
       return AD5940ERR_OK;
     }
   }
@@ -576,16 +592,16 @@ AD5940Err AppBIAISR(void *pBuff, uint32_t *pCount)
   BuffCount = *pCount;
   if(AppBIACfg.BIAInited == bFALSE)
     return AD5940ERR_APPERROR;
-  if(AD5940_WakeUp(10) > 10)  /* Wakeup AFE by read register, read 10 times at most */
+  if(AD5940_WakeUp(10) > 10)  /* Wakeup AFE by read register, read register 10 times at most */
     return AD5940ERR_WAKEUP;  /* Wakeup Failed */
-  AD5940_SleepKeyCtrlS(SLPKEY_LOCK);  /* Don't enter hibernate */
+  AD5940_SleepKeyCtrlS(SLPKEY_LOCK);  /* Don't enter hibernate while reading FIFO */
   *pCount = 0;
 
   if(AD5940_INTCTestFlag(AFEINTC_0, AFEINTSRC_DATAFIFOTHRESH) == bTRUE)
   {
     /* Now there should be 4 data in FIFO */
     FifoCnt = (AD5940_FIFOGetCnt()/4)*4;
-    
+
     if(FifoCnt > BuffCount)
     {
       ///@todo buffer is limited.
@@ -593,14 +609,16 @@ AD5940Err AppBIAISR(void *pBuff, uint32_t *pCount)
     AD5940_FIFORd((uint32_t *)pBuff, FifoCnt);
     AD5940_INTCClrFlag(AFEINTSRC_DATAFIFOTHRESH);
     AppBIARegModify(pBuff, &FifoCnt);   /* If there is need to do AFE re-configure, do it here when AFE is in active state */
-    //AD5940_EnterSleepS();  /* Manually put AFE back to hibernate mode. */
-    AD5940_SleepKeyCtrlS(SLPKEY_UNLOCK);  /* Allow AFE to enter hibernate mode */
-    /* Process data */ 
-    AppBIADataProcess((int32_t*)pBuff,&FifoCnt); 
+    AD5940_SleepKeyCtrlS(SLPKEY_UNLOCK);
+    AD5940_EnterSleepS();
+    /* Process data */
+    AppBIADataProcess((int32_t*)pBuff,&FifoCnt);
     *pCount = FifoCnt;
     return 0;
   }
-  
+
+  AD5940_SleepKeyCtrlS(SLPKEY_UNLOCK);
+  AD5940_EnterSleepS();
   return 0;
 } 
 

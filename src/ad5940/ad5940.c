@@ -134,7 +134,7 @@ static AD5940Err AD5940_SEQGenSearchReg(uint32_t RegAddr, uint32_t *pIndex)
   uint32_t i;
 
   RegAddr = (RegAddr>>2)&0xff;
-  for(i=0;i<SeqGenDB.SeqLen;i++)
+  for(i=0;i<SeqGenDB.RegCount;i++)
   {
     if(RegAddr == SeqGenDB.pRegInfo[i].RegAddr)
     {
@@ -346,133 +346,7 @@ uint32_t AD5940_SEQCycleTime(void)
 */
 
 /**
- * Check if an uint8_t value exist in table.
-*/
-static int32_t _is_value_in_table(uint8_t value, const uint8_t *table, uint8_t len, uint8_t *index)
-{
-  for(int i=0; i<len; i++)
-  {
-    if(value == table[i])
-    {
-      *index = i;
-      return bTRUE;
-    }
-  }
-  return bFALSE;
-}
-
-/**
- * @brief return if the SINC3/SINC2 combination is available for notch 50Hz filter.
- *        If it's not availabe, hardware automatically bypass Notch even if it's enabled.
- * @param pFilterInfo the filter configuration, only need sinc2/sinc3 osr and adc data rate information.
- * @return return bTRUE if notch 50Hz filter is available.
-*/
-BoolFlag AD5940_Notch50HzAvailable(ADCFilterCfg_Type *pFilterInfo, uint8_t *dl)
-{
-  if((pFilterInfo->ADCRate == ADCRATE_800KHZ && pFilterInfo->ADCSinc3Osr == ADCSINC3OSR_2)||\
-      (pFilterInfo->ADCRate == ADCRATE_1P6MHZ && pFilterInfo->ADCSinc3Osr != ADCSINC3OSR_2))
-  {
-    //this combination suits for filter:
-    //SINC3 OSR2, for 800kSPS
-    //and SINC3 OSR4 and OSR5 for 1.6MSPS,
-    const uint8_t available_sinc2_osr[] = {ADCSINC2OSR_533, ADCSINC2OSR_667,ADCSINC2OSR_800, ADCSINC2OSR_889, ADCSINC2OSR_1333};
-    const uint8_t dl_50Hz[] = {15,12,10,9,6};
-    uint8_t index;
-    if(_is_value_in_table(pFilterInfo->ADCSinc2Osr, available_sinc2_osr, sizeof(available_sinc2_osr), &index))
-    {
-      *dl = dl_50Hz[index];
-      return bTRUE;
-    }
-  }
-  else if(pFilterInfo->ADCRate == ADCRATE_1P6MHZ && pFilterInfo->ADCSinc3Osr == ADCSINC3OSR_2)
-  {
-    //this combination suits for filter:
-    //SINC3 OSR2 for 1.6MSPS
-    const uint8_t available_sinc2_osr[] = {ADCSINC2OSR_889, ADCSINC2OSR_1067, ADCSINC2OSR_1333};
-    const uint8_t dl_50Hz[] = {18,15,12};
-    uint8_t index;
-    if(_is_value_in_table(pFilterInfo->ADCSinc2Osr, available_sinc2_osr, sizeof(available_sinc2_osr), &index))
-    {
-      *dl = dl_50Hz[index];
-      return bTRUE;
-    }
-  }
-  else if(pFilterInfo->ADCRate == ADCRATE_800KHZ && pFilterInfo->ADCSinc3Osr != ADCSINC3OSR_2)
-  {
-    //this combination suits for filter:
-    //SINC3 OSR4 and OSR5 for 800kSPS,
-    const uint8_t available_sinc2_osr[] = {ADCSINC2OSR_178, ADCSINC2OSR_267, ADCSINC2OSR_533, ADCSINC2OSR_640,\
-                                    ADCSINC2OSR_800, ADCSINC2OSR_1067};
-    const uint8_t dl_50Hz[] = {18,12,6,5,4,3};
-    uint8_t index;
-    if(_is_value_in_table(pFilterInfo->ADCSinc2Osr, available_sinc2_osr, sizeof(available_sinc2_osr), &index))
-    {
-      *dl = dl_50Hz[index];
-      return bTRUE;
-    }
-  }
-  *dl = 0;
-  return bFALSE;
-}
-
-/**
- * @brief return if the SINC3/SINC2 combination is available for notch 60Hz filter.
- *        If it's not availabe, hardware automatically bypass Notch even if it's enabled.
- * @param pFilterInfo the filter configuration, need sinc2/sinc3 osr and adc data rate information.
- * @return return bTRUE if notch 60Hz filter is available.
-*/
-BoolFlag AD5940_Notch60HzAvailable(ADCFilterCfg_Type *pFilterInfo, uint8_t *dl)
-{
-  if((pFilterInfo->ADCRate == ADCRATE_800KHZ && pFilterInfo->ADCSinc3Osr == ADCSINC3OSR_2)||\
-      (pFilterInfo->ADCRate == ADCRATE_1P6MHZ && pFilterInfo->ADCSinc3Osr != ADCSINC3OSR_2))
-  {
-    //this combination suits for filter:
-    //SINC3 OSR2, for 800kSPS
-    //and SINC3 OSR4 and OSR5 for 1.6MSPS,
-    const uint8_t available_sinc2_osr[] = {ADCSINC2OSR_667, ADCSINC2OSR_1333};
-    const uint8_t dl_60Hz[] = {10,5};
-    uint8_t index;
-    if(_is_value_in_table(pFilterInfo->ADCSinc2Osr, available_sinc2_osr, sizeof(available_sinc2_osr), &index))
-    {
-      *dl = dl_60Hz[index];
-      return bTRUE;
-    }
-  }
-  else if(pFilterInfo->ADCRate == ADCRATE_1P6MHZ && pFilterInfo->ADCSinc3Osr == ADCSINC3OSR_2)
-  {
-    //this combination suits for filter:
-    //SINC3 OSR2 for 1.6MSPS
-    const uint8_t available_sinc2_osr[] = {ADCSINC2OSR_889, ADCSINC2OSR_1333};
-    const uint8_t dl_60Hz[] = {15,10};
-    uint8_t index;
-    if(_is_value_in_table(pFilterInfo->ADCSinc2Osr, available_sinc2_osr, sizeof(available_sinc2_osr), &index))
-    {
-      *dl = dl_60Hz[index];
-      return bTRUE;
-    }
-  }
-  else if(pFilterInfo->ADCRate == ADCRATE_800KHZ && pFilterInfo->ADCSinc3Osr != ADCSINC3OSR_2)
-  {
-    //this combination suits for filter:
-    //SINC3 OSR4 and OSR5 for 800kSPS,
-    const uint8_t available_sinc2_osr[] = {ADCSINC2OSR_178, ADCSINC2OSR_267, ADCSINC2OSR_533, ADCSINC2OSR_667,\
-                                    ADCSINC2OSR_889, ADCSINC2OSR_1333};
-    const uint8_t dl_60Hz[] = {15,10,5,4,3,2};
-    uint8_t index;
-    if(_is_value_in_table(pFilterInfo->ADCSinc2Osr, available_sinc2_osr, sizeof(available_sinc2_osr), &index))
-    {
-      *dl = dl_60Hz[index];
-      return bTRUE;
-    }
-  }
-  *dl = 0;
-  return bFALSE;
-}
-
-/**
- * @brief Calculate how many clocks are needed in sequencer wait command to generate required number of data from filter output.
- * @note When measurement is done, it's recommend to disable blocks like ADCPWR, ADCCNV, SINC2, DFT etc. If blocks remain powered up,
- *       they may need less clocks to generate required number of output. Use function @ref AD5940_AFECtrlS to control these blocks.
+ * @brief Calculate how much clocks are needed in sequencer wait command to generate required number of data.
  * @param pFilterInfo: Pointer to configuration structure. 
  * @param pClocks: pointer used to store results.         
  * @return return none.
@@ -480,9 +354,9 @@ BoolFlag AD5940_Notch60HzAvailable(ADCFilterCfg_Type *pFilterInfo, uint8_t *dl)
 void AD5940_ClksCalculate(ClksCalInfo_Type *pFilterInfo, uint32_t *pClocks)
 {
   uint32_t temp = 0;
-  const uint32_t sinc2osr_table[] = {22,44,89,178,267,533,640,667,800,889,1067,1333,0};
+  const uint32_t sin2osr_table[] = {22,44,89,178,267,533,640,667,800,889,1067,1333,0};
   const uint32_t sinc3osr_table[] = {5,4,2,0};
-
+  
   *pClocks = 0;
   if(pFilterInfo == NULL) return;
   if(pClocks == NULL) return;
@@ -498,34 +372,13 @@ void AD5940_ClksCalculate(ClksCalInfo_Type *pFilterInfo, uint32_t *pClocks)
       temp = (uint32_t)(((pFilterInfo->DataCount+2)*sinc3osr_table[pFilterInfo->ADCSinc3Osr]+1)*20*pFilterInfo->RatioSys2AdcClk + 0.5f);
       break;
     case DATATYPE_SINC2: 
-      temp = (pFilterInfo->DataCount+1)*sinc2osr_table[pFilterInfo->ADCSinc2Osr] + 1;
+      temp = (pFilterInfo->DataCount+1)*sin2osr_table[pFilterInfo->ADCSinc2Osr] + 1;
       pFilterInfo->DataType = DATATYPE_SINC3;
       pFilterInfo->DataCount = temp;
       AD5940_ClksCalculate(pFilterInfo, &temp);
       pFilterInfo->DataType = DATATYPE_SINC2;
       temp += 15;   /* Need extra 15 clocks for FIFO etc. Just to be safe. */
       break;
-    case DATATYPE_NOTCH:
-    {
-      ADCFilterCfg_Type filter;
-      filter.ADCRate = pFilterInfo->ADCRate;
-      filter.ADCSinc3Osr = pFilterInfo->ADCSinc3Osr;
-      filter.ADCSinc2Osr = pFilterInfo->ADCSinc2Osr;
-      uint8_t dl=0, dl_50, dl_60;
-      if(AD5940_Notch50HzAvailable(&filter, &dl_50)){
-        dl += dl_50 - 1;
-      }
-      if(AD5940_Notch60HzAvailable(&filter, &dl_60)){
-        dl += dl_60 - 1;
-      }
-      pFilterInfo->DataType = DATATYPE_SINC2;
-      pFilterInfo->DataCount += dl; //DL is the extra data input needed for filter to output first data.
-      AD5940_ClksCalculate(pFilterInfo,&temp);
-      //restore the filter info.
-      pFilterInfo->DataType = DATATYPE_NOTCH;
-      pFilterInfo->DataCount -= dl;
-      break;
-    }
     case DATATYPE_DFT:
       switch(pFilterInfo->DftSrc)
       {
@@ -538,10 +391,7 @@ void AD5940_ClksCalculate(ClksCalInfo_Type *pFilterInfo, uint32_t *pClocks)
           AD5940_ClksCalculate(pFilterInfo, &temp);
           break;
         case DFTSRC_SINC2NOTCH:
-          if(pFilterInfo->BpNotch)
-            pFilterInfo->DataType = DATATYPE_SINC2;
-          else
-            pFilterInfo->DataType = DATATYPE_NOTCH;
+          pFilterInfo->DataType = DATATYPE_SINC2;
           AD5940_ClksCalculate(pFilterInfo, &temp);
           break;
         case DFTSRC_AVG:
@@ -773,76 +623,6 @@ float AD5940_ComplexPhase(fImpCar_Type *a)
 }
 
 /**
- * @brief Calculate the optimum filter settings based on signal frequency.
- * @param freq: Frequency of signalr.
- * @return Return FreqParams.
-**/
-FreqParams_Type AD5940_GetFreqParameters(float freq)
-{
-	const uint32_t dft_table[] = {4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384};
-	const uint32_t sinc2osr_table[] = {1, 22,44,89,178,267,533,640,667,800,889,1067,1333};
-  const uint32_t sinc3osr_table[] = {2, 4, 5};
-	float AdcRate = 800000;
-	uint32_t n1 = 0;	// Sample rate after ADC filters
-	uint32_t n2 = 0; // Sample rate after DFT block
-	uint32_t iCycle = 0;
-	FreqParams_Type freq_params;
-	/* High power mode */
-	if(freq >= 20000)
-	{
-		freq_params. DftSrc = DFTSRC_SINC3;
-		freq_params.ADCSinc2Osr = 0;
-		freq_params.ADCSinc3Osr = 2;
-		freq_params.DftNum = DFTNUM_8192;
-		freq_params.NumClks = 0;
-		freq_params.HighPwrMode = bTRUE;
-		return freq_params;		
-	}
-	
-	if(freq < 0.51)
-	{
-		freq_params. DftSrc = DFTSRC_SINC2NOTCH;
-		freq_params.ADCSinc2Osr = 6;
-		freq_params.ADCSinc3Osr = 1;
-		freq_params.DftNum = DFTNUM_8192;
-		freq_params.NumClks = 0;
-		freq_params.HighPwrMode = bTRUE;
-		return freq_params;		
-	}
-	
-	/* Start with SINC2 setting */
-	for(uint8_t i = 0; i<sizeof(sinc2osr_table) / sizeof(uint32_t); i++)
-	{
-		n1 = sinc2osr_table[i] * sinc3osr_table[1];
-		if(((AdcRate/n1) < freq * 10) && (freq<20e3))
-			continue;
-		
-		/* Try DFT number */
-		for(uint32_t j = 8; j<sizeof(dft_table) / sizeof(uint32_t); j++)
-		{
-			n2 = dft_table[j];
-			iCycle = (uint32_t)(n1 * n2 * freq)/AdcRate;
-			if(iCycle < 8)
-				continue;
-			freq_params. DftSrc = DFTSRC_SINC2NOTCH;
-			freq_params.ADCSinc2Osr = i-1;
-			freq_params.ADCSinc3Osr = 1;
-			freq_params.DftNum = j;
-			freq_params.NumClks = 0;
-			freq_params.HighPwrMode = bFALSE;
-			if(n1 == 4)
-			{
-				freq_params. DftSrc = DFTSRC_SINC3;
-				freq_params.ADCSinc2Osr = 0;
-			}
-			return freq_params;
-		}
-	}
-		
-	return freq_params;
-}
-
-/**
  * @} Function_Helpers
 */
 
@@ -897,6 +677,22 @@ static unsigned char AD5940_ReadWrite8B(unsigned char data)
    return rx[0];
 }
 
+static void AD5940_Write8B(unsigned char data)
+{
+   uint8_t tx[1];
+   tx[0] = data;
+   AD5940_ReadWriteNBytes(tx,NULL,1);
+   return;
+}
+
+static unsigned char AD5940_Read8B(unsigned char data)
+{
+   uint8_t rx[1];
+   rx[0] = data;
+   AD5940_ReadWriteNBytes(NULL,rx,1);
+   return rx[0];
+}
+
 /**
   @brief Using SPI to transmit two bytes and return the received bytes. 
   @param data: The 16-bit data SPI will transmit.
@@ -909,6 +705,26 @@ static uint16_t AD5940_ReadWrite16B(uint16_t data)
    SendBuffer[0] = data>>8;
    SendBuffer[1] = data&0xff;
    AD5940_ReadWriteNBytes(SendBuffer,RecvBuffer,2);
+   return (((uint16_t)RecvBuffer[0])<<8)|RecvBuffer[1];
+}
+
+static void AD5940_Write16B(uint16_t data)
+{
+   uint8_t SendBuffer[2];
+   uint8_t RecvBuffer[2];
+   SendBuffer[0] = data>>8;
+   SendBuffer[1] = data&0xff;
+   AD5940_ReadWriteNBytes(SendBuffer,NULL,2);
+   return;
+}
+
+static uint16_t AD5940_Read16B(uint16_t data)
+{
+   uint8_t SendBuffer[2];
+   uint8_t RecvBuffer[3];  /* length=3 needed, see ReadWriteNBytes call below */
+   SendBuffer[0] = data>>8;
+   SendBuffer[1] = data&0xff;
+   AD5940_ReadWriteNBytes(NULL,RecvBuffer,3);
    return (((uint16_t)RecvBuffer[0])<<8)|RecvBuffer[1];
 }
 
@@ -930,6 +746,32 @@ static uint32_t AD5940_ReadWrite32B(uint32_t data)
    return (((uint32_t)RecvBuffer[0])<<24)|(((uint32_t)RecvBuffer[1])<<16)|(((uint32_t)RecvBuffer[2])<<8)|RecvBuffer[3];
 }
 
+static void AD5940_Write32B(uint32_t data)
+{
+   uint8_t SendBuffer[4];
+   uint8_t RecvBuffer[4];
+
+   SendBuffer[0] = (data>>24)&0xff;
+   SendBuffer[1] = (data>>16)&0xff;
+   SendBuffer[2] = (data>> 8)&0xff;
+   SendBuffer[3] = (data    )&0xff;
+   AD5940_ReadWriteNBytes(SendBuffer,NULL,4);
+   return;
+}
+
+static uint32_t AD5940_Read32B(uint32_t data)
+{
+   uint8_t SendBuffer[4];
+   uint8_t RecvBuffer[5];  /* length=5 needed, see ReadWriteNBytes call below */
+
+   SendBuffer[0] = (data>>24)&0xff;
+   SendBuffer[1] = (data>>16)&0xff;
+   SendBuffer[2] = (data>> 8)&0xff;
+   SendBuffer[3] = (data    )&0xff;
+   AD5940_ReadWriteNBytes(NULL,RecvBuffer,5);
+   return (((uint32_t)RecvBuffer[0])<<24)|(((uint32_t)RecvBuffer[1])<<16)|(((uint32_t)RecvBuffer[2])<<8)|RecvBuffer[3];
+}
+
 /**
  * @brief Write register through SPI.
  * @param RegAddr: The register address.
@@ -940,16 +782,15 @@ static void AD5940_SPIWriteReg(uint16_t RegAddr, uint32_t RegData)
 {  
   /* Set register address */
   AD5940_CsClr();
-  AD5940_ReadWrite8B(SPICMD_SETADDR);
-  AD5940_ReadWrite16B(RegAddr);
+  AD5940_Write8B(SPICMD_SETADDR);
+  AD5940_Write16B(RegAddr);
   AD5940_CsSet();
-  /* Add delay here to meet the SPI timing. */
   AD5940_CsClr();
-  AD5940_ReadWrite8B(SPICMD_WRITEREG);
+  AD5940_Write8B(SPICMD_WRITEREG);
   if(((RegAddr>=0x1000)&&(RegAddr<=0x3014)))
-    AD5940_ReadWrite32B(RegData);
+    AD5940_Write32B(RegData);
   else
-    AD5940_ReadWrite16B(RegData);
+    AD5940_Write16B(RegData);
   AD5940_CsSet();
 }
 
@@ -963,18 +804,18 @@ static uint32_t AD5940_SPIReadReg(uint16_t RegAddr)
   uint32_t Data = 0;
   /* Set register address that we want to read */
   AD5940_CsClr();
-  AD5940_ReadWrite8B(SPICMD_SETADDR);
-  AD5940_ReadWrite16B(RegAddr);
+  AD5940_Write8B(SPICMD_SETADDR);
+  AD5940_Write16B(RegAddr);
   AD5940_CsSet();
   /* Read it */
   AD5940_CsClr();
-  AD5940_ReadWrite8B(SPICMD_READREG);
-  AD5940_ReadWrite8B(0);  //Dummy read
+  AD5940_Write8B(SPICMD_READREG);
+  AD5940_Read8B(0);  //Dummy read
   /* The real data is coming */
   if((RegAddr>=0x1000)&&(RegAddr<=0x3014))
-    Data = AD5940_ReadWrite32B(0);
+    Data = AD5940_Read32B(0);
   else
-    Data = AD5940_ReadWrite16B(0);
+    Data = AD5940_Read16B(0);
   AD5940_CsSet();
   return Data;
 }
@@ -985,15 +826,28 @@ static uint32_t AD5940_SPIReadReg(uint16_t RegAddr)
   @param uiReadCount: How much data to be read.
   @return none.
 **/
+
 void AD5940_FIFORd(uint32_t *pBuffer, uint32_t uiReadCount)   
 {
   /* Use function AD5940_SPIReadReg to read REG_AFE_DATAFIFORD is also one method. */
    uint32_t i;
    
+   for(i=0;i<uiReadCount;i++)
+   {
+      pBuffer[i] = AD5940_SPIReadReg(REG_AFE_DATAFIFORD);
+   }
+}
+
+/*
+void AD5940_FIFORd(uint32_t *pBuffer, uint32_t uiReadCount)   
+{
+  /* Use function AD5940_SPIReadReg to read REG_AFE_DATAFIFORD is also one method. */
+/*   uint32_t i;
+   
    if(uiReadCount < 3)
    {
       /* This method is more efficient when readcount < 3 */
-      uint32_t i;
+/*      uint32_t i;
       AD5940_CsClr();
       AD5940_ReadWrite8B(SPICMD_SETADDR);
       AD5940_ReadWrite16B(REG_AFE_DATAFIFORD);
@@ -1012,15 +866,15 @@ void AD5940_FIFORd(uint32_t *pBuffer, uint32_t uiReadCount)
       AD5940_CsClr();
       AD5940_ReadWrite8B(SPICMD_READFIFO);
       /* 6 dummy write before valid data read back */
-      for(i=0;i<6;i++)
+/*      for(i=0;i<6;i++)
          AD5940_ReadWrite8B(0);
       /* Continuously read DATAFIFORD register with offset 0 */
-      for(i=0;i<uiReadCount-2;i++)
+/*      for(i=0;i<uiReadCount-2;i++)
       {
          pBuffer[i] = AD5940_ReadWrite32B(0); /*Offset is 0, so we always read DATAFIFORD register */
-      }
+/*      }
       /* Read back last two FIFO data with none-zero offset*/
-      pBuffer[i++] = AD5940_ReadWrite32B(0x44444444);
+/*      pBuffer[i++] = AD5940_ReadWrite32B(0x44444444);
       pBuffer[i] = AD5940_ReadWrite32B(0x44444444);
       AD5940_CsSet();
    }
@@ -1093,6 +947,7 @@ uint32_t AD5940_ReadReg(uint16_t RegAddr)
 **/
 void AD5940_Initialize(void)
 {
+  int err = 0;
   int i;
   /* Write following registers with its data sequentially whenever there is a reset happened. */
   const struct
@@ -1129,12 +984,16 @@ void AD5940_Initialize(void)
   SeqGenDB.RegCount = 0;
   SeqGenDB.LastError = AD5940ERR_OK;
   SeqGenDB.EngineStart = bFALSE;
-#ifndef CHIPSEL_M355
-  AD5940_CsSet(); /* Pull high CS in case it's low */
-#endif
-  for(i=0; i<sizeof(RegTable)/sizeof(RegTable[0]); i++)
+  #ifndef CHIPSEL_M355
+    AD5940_CsSet(); /* Pull high CS in case it's low */
+  #endif
+
+  for(i=0; i<sizeof(RegTable)/sizeof(RegTable[0]); i++){
     AD5940_WriteReg(RegTable[i].reg_addr, RegTable[i].reg_data);
-  i = AD5940_ReadReg(REG_AFECON_CHIPID);  
+    //printf("RegTable: %d\n", RegTable[i]);
+    }
+  i = AD5940_ReadReg(REG_AFECON_CHIPID);
+  //printf("RX AD5940: %d\n", i);
   if(i == 0x5501)
     bIsS2silicon = bTRUE;
   else if(i == 0x5502)  /* S3 chip-id is 0x5502. The is no difference with S2. */
@@ -1144,17 +1003,24 @@ void AD5940_Initialize(void)
 #ifdef ADI_DEBUG
   else
   {
-    printf("CHIPID read error:0x%04x. AD5940 is not present?\n", i);
-    while(1);
+    ADI_Print("CHIPID read error:0x%04x. AD5940 is not present?\n", i);
+    err = 1;
+    //while(1);
   }
-#ifdef CHIPSEL_M355
-  ADI_Print("This ADuCM355!\n");
-#else
-  ADI_Print("This AD594x!\n");
-#endif
-  ADI_Print("Note: Current Silicon is %s\n", bIsS2silicon?"S2":"S1");
-  ADI_Print("AD5940LIB Version:v%d.%d.%d\n", AD5940LIB_VER_MAJOR, AD5940LIB_VER_MINOR, AD5940LIB_VER_PATCH);
-#endif
+
+  if(!err)
+  {
+  #ifdef CHIPSEL_M355
+    //ADI_Print("\n=== AD5940 System Initialized ===\n");
+    //ADI_Print("Chip: ADuCM355\n");
+  #else
+    //ADI_Print("\n=== AD5940 System Initialized ===\n");
+    //ADI_Print("Chip: AD594x\n");
+  #endif
+    //ADI_Print("Note: Current Silicon is %s\n", bIsS2silicon?"S2":"S1");
+    //ADI_Print("AD5940LIB Version:v%d.%d.%d\n", AD5940LIB_VER_MAJOR, AD5940LIB_VER_MINOR, AD5940LIB_VER_PATCH);
+  #endif
+  }
 }
 
 /**
@@ -1390,7 +1256,7 @@ void AD5940_HSDacCfgS(HSDACCfg_Type *pHsDacCfg)
 }
 
 
-void __AD5940_SetDExRTIA(uint32_t DExPin, uint32_t DeRtia, uint32_t DeRload)
+static void __AD5940_SetDExRTIA(uint32_t DExPin, uint32_t DeRtia, uint32_t DeRload)
 {
   uint32_t tempreg;
   /* deal with HSTIA DE RTIA */
@@ -1816,15 +1682,19 @@ void AD5940_ADCFilterCfgS(ADCFilterCfg_Type *pFiltCfg)
     tempreg |= BITM_AFE_ADCFILTERCON_LPFBYPEN;
   if(pFiltCfg->BpSinc3 == bTRUE)
     tempreg |= BITM_AFE_ADCFILTERCON_SINC3BYP;
-  /**
-   * Average filter is enabled when DFT source is @ref DFTSRC_AVG in function @ref AD5940_DFTCfgS.
-   * Once average function is enabled, it's automatically set as DFT source, register DFTCON.DFTINSEL is ignored.
-   */
   //if(pFiltCfg->AverageEnable == bTRUE)
   //  tempreg |= BITM_AFE_ADCFILTERCON_AVRGEN;
   tempreg |= (uint32_t)(pFiltCfg->ADCSinc2Osr)<<BITP_AFE_ADCFILTERCON_SINC2OSR;
   tempreg |= (uint32_t)(pFiltCfg->ADCSinc3Osr)<<BITP_AFE_ADCFILTERCON_SINC3OSR;
   tempreg |= (uint32_t)(pFiltCfg->ADCAvgNum)<<BITP_AFE_ADCFILTERCON_AVRGNUM;
+
+  if(pFiltCfg->Sinc2NotchClkEnable == bFALSE)            /* Need to bFALSE clock, set bit to 1 to bFALSE clock */
+    tempreg |= BITM_AFE_ADCFILTERCON_SINC2CLKENB;   /* bFALSE SINC2 CLK */
+
+  if(pFiltCfg->WGClkEnable == bFALSE) 
+    tempreg |= BITM_AFE_ADCFILTERCON_DACWAVECLKENB; /* bFALSE WG CLK */
+  if(pFiltCfg->DFTClkEnable == bFALSE) 
+    tempreg |= BITM_AFE_ADCFILTERCON_DFTCLKENB;     /* bFALSE DFT CLK */
 
   AD5940_WriteReg(REG_AFE_ADCFILTERCON, tempreg);
 
@@ -2589,40 +2459,7 @@ void AD5940_HFOSC32MHzCtrl(BoolFlag Mode32MHz)
 
   AD5940_WriteReg(REG_AFECON_CLKEN1,RdCLKEN1&(~BITM_AFECON_CLKEN1_ACLKDIS)); /* Enable ACLK */
 }
-/**
- * @brief Enable high power mode for high frequency EIS
- * @param Mode32MHz : {bTRUE, bFALSE}
- *        - bTRUE: HFOSC 32MHz mode.
- *        - bFALSE: HFOSC 16MHz mode.
- * @return return none.
-*/
-void 			AD5940_HPModeEn(BoolFlag Enable)
-{
-	CLKCfg_Type clk_cfg;
-	uint32_t temp_reg = 0;
-	
-	/* Check what the system clock is */
-	temp_reg = AD5940_ReadReg(REG_AFECON_CLKSEL);
-	clk_cfg.ADCCLkSrc = (temp_reg>>2)&0x3; 
-  clk_cfg.SysClkSrc = temp_reg & 0x3; 
-	if(Enable == bTRUE)
-	{
-		clk_cfg.SysClkDiv = SYSCLKDIV_2;
-		clk_cfg.HfOSC32MHzMode = bTRUE;
-		AD5940_AFEPwrBW(AFEPWR_HP, AFEBW_250KHZ);
-	}
-	else
-	{
-		clk_cfg.SysClkDiv = SYSCLKDIV_1;
-		clk_cfg.HfOSC32MHzMode = bFALSE;
-		AD5940_AFEPwrBW(AFEPWR_LP, AFEBW_100KHZ);
-	}
-    clk_cfg.ADCClkDiv = ADCCLKDIV_1;       
-    clk_cfg.HFOSCEn = (temp_reg & 0x3) == 0x1? bFALSE : bTRUE;;
-	clk_cfg.HFXTALEn = (temp_reg & 0x3) == 0x1? bTRUE : bFALSE;
-    clk_cfg.LFOSCEn = bTRUE;
-    AD5940_CLKCfg(&clk_cfg);
-}
+
 
 /**
  * @defgroup Interrupt_Controller_Functions
@@ -3086,18 +2923,34 @@ static uint32_t __AD5940_TakeMeasurement(int32_t *time_out)
 **/
 AD5940Err AD5940_ADCPGACal(ADCPGACal_Type *pADCPGACal)
 {
+/** @cond */
+#define VOLTSRC_GAIN1   0                 /* The standard voltage source for GAIN1 calibration. 0: internal -1.1 for gain, 1 : internal 0.8V for gain. 2: external 1.8V on CE0 */
+#define STDGAIN_FOR_GAIN49    ADCPGA_1    /* The standard gain. Use this gain to calibrate GAIN4 and GAIN9. Select from ADCPGA_1, ADCPGA_1P5 and ADCPGA_2 */
+#define __STDGAIN_VALUE       ((STDGAIN_FOR_GAIN49==ADCPGA_1)?1:\
+                                ((STDGAIN_FOR_GAIN49==ADCPGA_1P5)?1.5:\
+                                (STDGAIN_FOR_GAIN49==ADCPGA_2?2:4)))
+/** @endcond*/
   const float kFactor = 1.835f/1.82f;
   ADCBaseCfg_Type adc_base;
+  ADCFilterCfg_Type adc_filter;
+  HSLoopCfg_Type hsloop_cfg;
 
+  float VRef1p82 = pADCPGACal->VRef1p82;
+  float VRef1p11 = pADCPGACal->VRef1p11;
   int32_t time_out;
   uint32_t INTCCfg;
   int32_t ADCCode;
+  uint32_t HSDACCdoe = 0x800;     /* Use HSDAC voltage to calibrate GAIN2/4/9. For GAIN1 and 1P5, it's ignored */
+  int32_t ExpectedGainCode = 0;
   BoolFlag bADCClk32MHzMode;
 
   uint32_t regaddr_gain, regaddr_offset;
+  uint32_t GainADCMuxPSel, GainADCMuxNSel;
+  uint32_t OffsetADCMuxPSel = ADCMUXP_VSET1P1, OffsetADCMuxNSel = ADCMUXN_VSET1P1;  /* Set default to 1.1V common voltage for ADC MUX P/N */
   
   if(pADCPGACal == NULL) return AD5940ERR_NULLP;
   if(pADCPGACal->ADCPga > ADCPGA_9) return AD5940ERR_PARA;  /* Parameter Error */
+  if(VRef1p82 < 1.70f)  VRef1p82 = 1.82f;       /* It looks like reference value is wrong, set it to default value and continue */
   
   if(pADCPGACal->AdcClkFreq > (32000000*0.8))
     bADCClk32MHzMode = bTRUE; 
@@ -3106,135 +2959,188 @@ AD5940Err AD5940_ADCPGACal(ADCPGACal_Type *pADCPGACal)
    *  Determine Gain calibration method according to different gain value...
    *  and calibration register 
    * */
-  static const struct _cal_registers
+  switch(pADCPGACal->ADCPga)
   {
-    uint16_t gain_reg;
-    uint16_t offset_reg;
-  }cal_registers[] = {
-    {REG_AFE_ADCGAINGN1,REG_AFE_ADCOFFSETGN1},
-    {REG_AFE_ADCGAINGN1P5,REG_AFE_ADCOFFSETGN1P5},
-    {REG_AFE_ADCGAINGN2,REG_AFE_ADCOFFSETGN2},
-    {REG_AFE_ADCGAINGN4,REG_AFE_ADCOFFSETGN4},
-    {REG_AFE_ADCGAINGN9,REG_AFE_ADCOFFSETGN9},
-  };
-  regaddr_gain = cal_registers[pADCPGACal->ADCPga].gain_reg;
-  regaddr_offset = cal_registers[pADCPGACal->ADCPga].offset_reg;
+    float VoltForGainCal;
+    case ADCPGA_1:
+      regaddr_gain = REG_AFE_ADCGAINGN1;
+      regaddr_offset = REG_AFE_ADCOFFSETGN1;
+      if(VOLTSRC_GAIN1 == 0) /* Internal -1.1V */
+      {
+      GainADCMuxPSel = ADCMUXP_AGND;
+      GainADCMuxNSel = ADCMUXN_VSET1P1;
+      VoltForGainCal = 0-VRef1p11;
+      }
+      else if(VOLTSRC_GAIN1 == 1) /* Internal 0.7V */
+      {
+      GainADCMuxPSel = ADCMUXP_VREF1P8DAC;
+      GainADCMuxNSel = ADCMUXN_VSET1P1;
+      VoltForGainCal = VRef1p82-VRef1p11;
+      }
+      else if(VOLTSRC_GAIN1 == 2)  /* External 1.8V */
+      {
+      GainADCMuxPSel = ADCMUXP_VCE0;
+      GainADCMuxNSel = ADCMUXN_VSET1P1;
+      VoltForGainCal = 1.8f-VRef1p11;
+      }
+      else if(VOLTSRC_GAIN1 == 3)  /* Internal 0.7V... And internal -1.1V */
+      {
+      GainADCMuxPSel = ADCMUXP_VREF1P8DAC;
+      GainADCMuxNSel = ADCMUXN_VSET1P1;
+      }
+      ExpectedGainCode = (int32_t)(VoltForGainCal*1/VRef1p82*32768/kFactor + 0x8000);
+      break;
+    case ADCPGA_1P5:
+      regaddr_gain = REG_AFE_ADCGAINGN1P5;
+      regaddr_offset = REG_AFE_ADCOFFSETGN1P5;
+      GainADCMuxPSel = ADCMUXP_VREF1P8DAC;  /* DAC reference 1.82V */
+      GainADCMuxNSel = ADCMUXN_VSET1P1;
+      VoltForGainCal = VRef1p82 - VRef1p11; 
+      ExpectedGainCode = (int32_t)(VoltForGainCal*1.5f/VRef1p82*32768/kFactor + 0x8000);
+      break;
+    case ADCPGA_2:
+      regaddr_gain = REG_AFE_ADCGAINGN2;
+      regaddr_offset = REG_AFE_ADCOFFSETGN2;
+      GainADCMuxPSel = ADCMUXP_VREF1P8DAC;  /* DAC reference 1.82V */
+      GainADCMuxNSel = ADCMUXN_VSET1P1;
+      VoltForGainCal = VRef1p82 - VRef1p11; 
+      ExpectedGainCode = (int32_t)(VoltForGainCal*2/VRef1p82*32768/kFactor + 0x8000);
+      break;
+    case ADCPGA_4:
+      regaddr_gain = REG_AFE_ADCGAINGN1P5;
+      regaddr_offset = REG_AFE_ADCOFFSETGN1P5;
+      GainADCMuxPSel = ADCMUXP_P_NODE;  /* DAC reference 1.82V */
+      GainADCMuxNSel = ADCMUXN_N_NODE;
+			/* Expected code is measured with GAIN1P5(or with GAIN1?). */
+      HSDACCdoe = 0x800 + 0x300;  /* 0x300--> 0x300/0x1000*0.8*BUFFERGAIN2 = 0.3V. */
+      break;
+    case ADCPGA_9:
+      regaddr_gain = REG_AFE_ADCGAINGN1P5;
+      regaddr_offset = REG_AFE_ADCOFFSETGN1P5;
 
-  /* Do initialization */
+      GainADCMuxPSel = ADCMUXP_P_NODE;  /* DAC reference 1.82V */
+      GainADCMuxNSel = ADCMUXN_N_NODE;
+      VoltForGainCal = VRef1p82 - VRef1p11; 
+      /* Expected code is measured with GAIN1P5(or with GAIN1?). */
+      HSDACCdoe = 0x800 + 0x155;  /* 0x155--> 0x155/0x1000*0.8*BUFFERGAIN2 = 0.133V. */
+      break;
+		default:
+			return AD5940ERR_PARA;
+  }
+
+  /* Step0: Do initialization */
   __AD5940_ReferenceON();
-  ADCFilterCfg_Type adc_filter;
-  /* Initialize ADC filters ADCRawData-->SINC3-->SINC2+NOTCH. Use SIN2 data for calibration-->Lower noise */
+  /* Step0.0 Initialize ADC filters ADCRawData-->SINC3-->SINC2+NOTCH. Use SIN2 data for calibration-->Lower noise */
   adc_filter.ADCSinc3Osr = pADCPGACal->ADCSinc3Osr;
   adc_filter.ADCSinc2Osr = pADCPGACal->ADCSinc2Osr;  /* 800KSPS/4/1333 = 150SPS */
   adc_filter.ADCAvgNum = ADCAVGNUM_2;         /* Don't care about it. Average function is only used for DFT */
   adc_filter.ADCRate = bADCClk32MHzMode?ADCRATE_1P6MHZ:ADCRATE_800KHZ;        /* If ADC clock is 32MHz, then set it to ADCRATE_1P6MHZ. Default is 16MHz, use ADCRATE_800KHZ. */
   adc_filter.BpNotch = bTRUE;                 /* SINC2+Notch is one block, when bypass notch filter, we can get fresh data from SINC2 filter. */
   adc_filter.BpSinc3 = bFALSE;                /* We use SINC3 filter. */
+  adc_filter.Sinc3ClkEnable = bTRUE;          /* Enable SINC3 clock.  */
+  adc_filter.Sinc2NotchClkEnable = bTRUE;     
   adc_filter.Sinc2NotchEnable = bTRUE;        /* Enable the SINC2+Notch block. You can also use function AD5940_AFECtrlS */
+  adc_filter.DFTClkEnable = bFALSE;
+  adc_filter.WGClkEnable = bTRUE;  
   AD5940_ADCFilterCfgS(&adc_filter);
-  /* Turn ON reference and ADC power, and DAC reference. We use DAC 1.8V reference to calibrate ADC because of the ADC reference bug. */
+  /* Step0.1 Initialize ADC basic function */
+  adc_base.ADCMuxP = OffsetADCMuxPSel;
+  adc_base.ADCMuxN = OffsetADCMuxNSel;
+  adc_base.ADCPga = pADCPGACal->ADCPga;                   /* Set correct Gain value. */
+  AD5940_ADCBaseCfgS(&adc_base);
+  hsloop_cfg.HsDacCfg.ExcitBufGain = EXCITBUFGAIN_2;
+  hsloop_cfg.HsDacCfg.HsDacGain = HSDACGAIN_1;
+  hsloop_cfg.HsDacCfg.HsDacUpdateRate = 7;
+  hsloop_cfg.HsTiaCfg.DiodeClose = bFALSE;
+  hsloop_cfg.HsTiaCfg.HstiaBias = HSTIABIAS_1P1;
+  hsloop_cfg.HsTiaCfg.HstiaCtia = 31;
+  hsloop_cfg.HsTiaCfg.HstiaDeRload = HSTIADERLOAD_OPEN;
+  hsloop_cfg.HsTiaCfg.HstiaDeRtia = HSTIADERTIA_OPEN;
+  hsloop_cfg.HsTiaCfg.HstiaDe1Rload = HSTIADERLOAD_OPEN;
+  hsloop_cfg.HsTiaCfg.HstiaDe1Rtia = HSTIADERTIA_OPEN;
+  hsloop_cfg.HsTiaCfg.HstiaRtiaSel = HSTIARTIA_200;
+  hsloop_cfg.SWMatCfg.Dswitch = SWD_OPEN;
+  hsloop_cfg.SWMatCfg.Pswitch = SWP_PL;
+  hsloop_cfg.SWMatCfg.Nswitch = SWN_NL;
+  hsloop_cfg.SWMatCfg.Tswitch = SWT_TRTIA;
+  hsloop_cfg.WgCfg.GainCalEn = bTRUE;
+  hsloop_cfg.WgCfg.OffsetCalEn = bTRUE;
+  hsloop_cfg.WgCfg.WgType = WGTYPE_MMR;
+  hsloop_cfg.WgCfg.WgCode = HSDACCdoe;        /* Determine the right DAC code with PGA gain */
+  AD5940_HSLoopCfgS(&hsloop_cfg);
+  /* Step0.2 Turn ON reference and ADC power, and DAC power and DAC reference. We use DAC 1.8V reference to calibrate ADC because of the ADC reference bug. */
   AD5940_AFECtrlS(AFECTRL_ALL, bFALSE); /* Disable all */
-  AD5940_AFECtrlS(AFECTRL_ADCPWR|AFECTRL_HPREFPWR|AFECTRL_DACREFPWR|AFECTRL_HSDACPWR|AFECTRL_SINC2NOTCH, bTRUE);
+  AD5940_AFECtrlS(AFECTRL_ADCPWR|AFECTRL_HPREFPWR|AFECTRL_DACREFPWR|AFECTRL_HSDACPWR|AFECTRL_SINC2NOTCH|\
+                  AFECTRL_EXTBUFPWR|AFECTRL_INAMPPWR|AFECTRL_HSTIAPWR|AFECTRL_WG, bTRUE);
   AD5940_Delay10us(25);   /* Wait 250us for reference power up */
-  /* INTC configure and open calibration lock */
+  /* Step0.3 INTC configure and open calibration lock */
   INTCCfg = AD5940_INTCGetCfg(AFEINTC_1);
   AD5940_INTCCfg(AFEINTC_1, AFEINTSRC_SINC2RDY, bTRUE); /* Enable SINC2 Interrupt in INTC1 */
   AD5940_WriteReg(REG_AFE_CALDATLOCK, KEY_CALDATLOCK);  /* Unlock KEY */
 
-  /* Do offset calibration. */
-  if(pADCPGACal->PGACalType != PGACALTYPE_GAIN){  /* Need offset calibration */
+  /* Step1: Do offset calibration. */
+  {
     int32_t ExpectedCode = 0x8000;        /* Ideal ADC output */
     AD5940_WriteReg(regaddr_offset, 0);   /* Reset offset register */
-
-    adc_base.ADCMuxP = ADCMUXP_VSET1P1;
-    adc_base.ADCMuxN = ADCMUXN_VSET1P1;   /* Short input with common voltage set to 1.11v */
-    adc_base.ADCPga = pADCPGACal->ADCPga; /* Set correct Gain value. */
-    AD5940_ADCBaseCfgS(&adc_base);
+    AD5940_ADCMuxCfgS(OffsetADCMuxPSel, OffsetADCMuxNSel);  
     AD5940_Delay10us(5);                  /* Wait for sometime */
-    ADCCode = 0;
-    for(int i=0; i<8; i++)
-    { /* ADC offset calibration register has resolution of 0.25LSB. take full use of it. */
-      time_out = pADCPGACal->TimeOut10us;   /* Reset time out counter */
-      ADCCode += __AD5940_TakeMeasurement(&time_out);  /* Turn on ADC to get one valid data and then turn off ADC. */
-      if(time_out == 0) goto ADCPGACALERROR_TIMEOUT;  /* Time out error. */
-    }
+
+    time_out = pADCPGACal->TimeOut10us;   /* Reset time out counter */
+    ADCCode = __AD5940_TakeMeasurement(&time_out);  /* Turn on ADC to get one valid data and then turn off ADC. */
+    if(time_out == 0) goto ADCPGACALERROR_TIMEOUT;  /* Time out error. */
+
     /* Calculate and write the result to registers before gain calibration */
-    ADCCode = (ExpectedCode<<3) - ADCCode;  /* We will shift back 1bit below */
-    /**
-     * AD5940 use formular Output = gain*(input + offset) for calibration.
-     * So, the measured results should be divided by gain to get value for offset register.
-    */
-    uint32_t gain = AD5940_ReadReg(regaddr_gain);
-    ADCCode = (ADCCode*0x4000)/gain;
+    ADCCode = (ExpectedCode - ADCCode)<<3;  /* We will shift back 1bit below */
     ADCCode = ((ADCCode+1)>>1)&0x7fff;      /* Round 0.5 */
     AD5940_WriteReg(regaddr_offset, ADCCode);
   }
   
-  /* Do gain calibration */
+  /* Step2 Do gain calibration */
   if(pADCPGACal->PGACalType != PGACALTYPE_OFFSET)  /* Need gain calibration */
   {
-    int32_t ExpectedGainCode;
-    static const float ideal_pga_gain[]={1,1.5,2,4,9};
     AD5940_WriteReg(regaddr_gain, 0x4000);  /* Reset gain register */
-    if(pADCPGACal->ADCPga <= ADCPGA_2)
-    {
-      //gain1,1.5,2 could use reference directly
-      adc_base.ADCMuxP = ADCMUXP_VREF1P8DAC;
-      adc_base.ADCMuxN = ADCMUXN_VSET1P1;
-      ExpectedGainCode = (int32_t)((pADCPGACal->VRef1p82 - pADCPGACal->VRef1p11)*ideal_pga_gain[pADCPGACal->ADCPga]/\
-                                    pADCPGACal->VRef1p82*32768/kFactor)\
-                                    + 0x8000;
-    }
-    else
-    {
-      //gain4,9 use DAC generated voltage
-      adc_base.ADCMuxP = ADCMUXP_P_NODE;
-      adc_base.ADCMuxN = ADCMUXN_N_NODE;
-      /* Setup HSLOOP to generate voltage for GAIN4/9 calibration. */
-      AD5940_AFECtrlS(AFECTRL_EXTBUFPWR|AFECTRL_INAMPPWR|AFECTRL_HSTIAPWR|AFECTRL_WG, bTRUE);
-      HSLoopCfg_Type hsloop_cfg;
-      hsloop_cfg.HsDacCfg.ExcitBufGain = EXCITBUFGAIN_2;
-      hsloop_cfg.HsDacCfg.HsDacGain = HSDACGAIN_1;
-      hsloop_cfg.HsDacCfg.HsDacUpdateRate = 7;
-      hsloop_cfg.HsTiaCfg.DiodeClose = bFALSE;
-      hsloop_cfg.HsTiaCfg.HstiaBias = HSTIABIAS_1P1;
-      hsloop_cfg.HsTiaCfg.HstiaCtia = 31;
-      hsloop_cfg.HsTiaCfg.HstiaDeRload = HSTIADERLOAD_OPEN;
-      hsloop_cfg.HsTiaCfg.HstiaDeRtia = HSTIADERTIA_OPEN;
-      hsloop_cfg.HsTiaCfg.HstiaDe1Rload = HSTIADERLOAD_OPEN;
-      hsloop_cfg.HsTiaCfg.HstiaDe1Rtia = HSTIADERTIA_OPEN;
-      hsloop_cfg.HsTiaCfg.HstiaRtiaSel = HSTIARTIA_200;
-      hsloop_cfg.SWMatCfg.Dswitch = SWD_OPEN;
-      hsloop_cfg.SWMatCfg.Pswitch = SWP_PL;
-      hsloop_cfg.SWMatCfg.Nswitch = SWN_NL;
-      hsloop_cfg.SWMatCfg.Tswitch = SWT_TRTIA;
-      hsloop_cfg.WgCfg.GainCalEn = bTRUE;
-      hsloop_cfg.WgCfg.OffsetCalEn = bTRUE;
-      hsloop_cfg.WgCfg.WgType = WGTYPE_MMR;
-      uint32_t HSDACCode;
-      if(pADCPGACal->ADCPga == ADCPGA_4)
-        HSDACCode = 0x800 + 0x300;  /* 0x300--> 0x300/0x1000*0.8*BUFFERGAIN2 = 0.3V. */
-      else if(pADCPGACal->ADCPga == ADCPGA_9)
-        HSDACCode = 0x800 + 0x155;  /* 0x155--> 0x155/0x1000*0.8*BUFFERGAIN2 = 0.133V. */
-      hsloop_cfg.WgCfg.WgCode = HSDACCode;
-      AD5940_HSLoopCfgS(&hsloop_cfg);
-
-      //measure expected code
-      adc_base.ADCPga = ADCPGA_1P5;
-      AD5940_ADCBaseCfgS(&adc_base);  
-      AD5940_Delay10us(5);
-      time_out = pADCPGACal->TimeOut10us;   /* Reset time out counter */
-      ExpectedGainCode = 0x8000 + (int32_t)((__AD5940_TakeMeasurement(&time_out) - 0x8000)/1.5f\
-                                            *ideal_pga_gain[pADCPGACal->ADCPga]);
-      if(time_out == 0) goto ADCPGACALERROR_TIMEOUT;
-    }
-    adc_base.ADCPga = pADCPGACal->ADCPga;    /* Set to gain under calibration */
+    adc_base.ADCMuxP = GainADCMuxPSel;
+    adc_base.ADCMuxN = GainADCMuxNSel;
+    adc_base.ADCPga = pADCPGACal->ADCPga;    /* Set correct gain */
     AD5940_ADCBaseCfgS(&adc_base);
-    AD5940_Delay10us(5);
+    AD5940_Delay10us(5); 
+
     time_out = pADCPGACal->TimeOut10us;      /* Reset time out counter */
     ADCCode = __AD5940_TakeMeasurement(&time_out);
     if(time_out == 0) goto ADCPGACALERROR_TIMEOUT;
-    /* Calculate and write the result to registers */
+    if((VOLTSRC_GAIN1 == 3)&&\
+        (pADCPGACal->ADCPga == ADCPGA_1))
+    {
+      //Do another measurement on -1.1V
+      AD5940_ADCMuxCfgS(ADCMUXP_AGND, ADCMUXN_VSET1P1);  
+      AD5940_Delay10us(5);
+      time_out = pADCPGACal->TimeOut10us;   /* Reset time out counter */
+      ADCCode -= __AD5940_TakeMeasurement(&time_out);
+      ADCCode += 0x8000;
+      if(time_out == 0) goto ADCPGACALERROR_TIMEOUT;
+    }
+
+    if(pADCPGACal->ADCPga == ADCPGA_4)  /* For gain4/9, we need HSDAC */
+    {
+      adc_base.ADCPga = STDGAIN_FOR_GAIN49; /* Use calibrated Gain to get expected ADC code */
+      AD5940_ADCBaseCfgS(&adc_base);  
+      AD5940_Delay10us(5); 
+      time_out = pADCPGACal->TimeOut10us;   /* Reset time out counter */
+      ExpectedGainCode = __AD5940_TakeMeasurement(&time_out);
+      if(time_out == 0) goto ADCPGACALERROR_TIMEOUT;
+      ExpectedGainCode = (int32_t)(((int32_t)ExpectedGainCode - 0x8000)*4/__STDGAIN_VALUE + 0x8000);
+    }
+    else if(pADCPGACal->ADCPga == ADCPGA_9)  /* For gain4/9, we need HSDAC */
+    {
+      adc_base.ADCPga = STDGAIN_FOR_GAIN49;
+      AD5940_ADCBaseCfgS(&adc_base);  /* Use GAIN2 to get expected ADC code */
+      AD5940_Delay10us(5); 
+      time_out = pADCPGACal->TimeOut10us;   /* Reset time out counter */
+      ExpectedGainCode = __AD5940_TakeMeasurement(&time_out);
+      if(time_out == 0) goto ADCPGACALERROR_TIMEOUT;
+      ExpectedGainCode = (int32_t)(((int32_t)ExpectedGainCode - 0x8000)*9/__STDGAIN_VALUE + 0x8000);
+    }
+    /* Calculate and write the result to registers before gain calibration */
     ADCCode = (ExpectedGainCode - 0x8000)*0x4000/(ADCCode-0x8000);
     ADCCode &= 0x7fff;
     AD5940_WriteReg(regaddr_gain, ADCCode);
@@ -3306,7 +3212,11 @@ AD5940Err AD5940_LPTIAOffsetCal(LPTIAOffsetCal_Type *pLPTIAOffsetCal)
   adc_filter.ADCRate = bADCClk32MHzMode?ADCRATE_1P6MHZ:ADCRATE_800KHZ;        /* If ADC clock is 32MHz, then set it to ADCRATE_1P6MHZ. Default is 16MHz, use ADCRATE_800KHZ. */
   adc_filter.BpNotch = bTRUE;                       /* SINC2+Notch is one block, when bypass notch filter, we can get fresh data from SINC2 filter. */
   adc_filter.BpSinc3 = bFALSE;                      /* We use SINC3 filter. */
+  adc_filter.Sinc3ClkEnable = bTRUE;                /* Enable SINC3 clock.  */
+  adc_filter.Sinc2NotchClkEnable = bTRUE;           /* Enable SINC2 clock */
   adc_filter.Sinc2NotchEnable = bTRUE;              /* Enable the SINC2+Notch block. You can also use function AD5940_AFECtrlS */
+  adc_filter.DFTClkEnable = bFALSE;
+  adc_filter.WGClkEnable = bFALSE;
   AD5940_ADCFilterCfgS(&adc_filter);
   /* Initialize ADC MUx and PGA */
   if(pLPTIAOffsetCal->LpAmpSel == LPAMP0)
@@ -3393,14 +3303,6 @@ AD5940Err AD5940_HSTIAOffsetCal(LPTIAOffsetCal_Type *pHSTIAOffsetCal)
 **/
 AD5940Err AD5940_HSRtiaCal(HSRTIACal_Type *pCalCfg, void *pResult)
 {
-  /***** CALIBRATION METHOD ******
-  1) Measure the complex voltage V_Rcal across the calibration DUT (Rcal).
-  2) Measure the complex voltage V_Rtia across Rtia [HSTIA_P (output) - HSTIA_N].
-  3) Note Rtia carries the same current as Rcal; I_Rtia = I_exc = I_Rcal
-  4) Implement the equation: Rtia = V_Rtia / I_Rtia 
-      --> Rtia = (V_Rtia / V_Rcal) * Rcal
-  *******************************/
-  
   AFERefCfg_Type aferef_cfg;
   HSLoopCfg_Type hs_loop;
   DSPCfg_Type dsp_cfg;
@@ -3413,19 +3315,17 @@ AD5940Err AD5940_HSRtiaCal(HSRTIACal_Type *pCalCfg, void *pResult)
   float ExcitVolt; /* Excitation voltage, unit is mV */
   uint32_t RtiaVal;
   uint32_t const HpRtiaTable[]={200,1000,5000,10000,20000,40000,80000,160000,0};
-  uint32_t const HSTIADERLOADTable[]={0,10,30,50,100,999999999999};
-  uint32_t const HSTIADERTIATable[] = {50,100,200,1000,5000,10000,20000,40000,80000,160000,0,999999999999999};
   uint32_t WgAmpWord;
 
-  iImpCar_Type DftRcalVolt, DftRtiaVolt;
-  
+  iImpCar_Type DftRcal, DftRtia;
+
   if(pCalCfg == NULL) return AD5940ERR_NULLP;
   if(pCalCfg->fRcal == 0)
     return AD5940ERR_PARA;
-  //if(pCalCfg->HsTiaCfg.HstiaRtiaSel > HSTIARTIA_160K)
-  //  return AD5940ERR_PARA;
-  //if(pCalCfg->HsTiaCfg.HstiaRtiaSel == HSTIARTIA_OPEN)
-   // return AD5940ERR_PARA; /* Do not support calibrating DE0-RTIA */
+  if(pCalCfg->HsTiaCfg.HstiaRtiaSel > HSTIARTIA_160K)
+    return AD5940ERR_PARA;
+  if(pCalCfg->HsTiaCfg.HstiaRtiaSel == HSTIARTIA_OPEN)
+    return AD5940ERR_PARA; /* Do not support calibrating DE0-RTIA */
   if(pResult == NULL)
       return AD5940ERR_NULLP;
 
@@ -3433,19 +3333,7 @@ AD5940Err AD5940_HSRtiaCal(HSRTIACal_Type *pCalCfg, void *pResult)
     bADCClk32MHzMode = bTRUE; 
 
   /* Calculate the excitation voltage we should use based on RCAL/Rtia */
-  if(pCalCfg->HsTiaCfg.HstiaRtiaSel == HSTIARTIA_OPEN)
-  {
-    if(pCalCfg->HsTiaCfg.HstiaDeRtia == HSTIADERTIA_TODE)
-    {
-      RtiaVal = pCalCfg->HsTiaCfg.ExtRtia;
-    }
-    else
-    {
-      RtiaVal = pCalCfg->HsTiaCfg.ExtRtia + HSTIADERLOADTable[pCalCfg->HsTiaCfg.HstiaDeRload] + HSTIADERTIATable[pCalCfg->HsTiaCfg.HstiaDeRtia];
-    }
-  }
-  else
-    RtiaVal = HpRtiaTable[pCalCfg->HsTiaCfg.HstiaRtiaSel];
+  RtiaVal = HpRtiaTable[pCalCfg->HsTiaCfg.HstiaRtiaSel];
   /*
     DAC output voltage calculation
     Note: RCAL value should be similar to RTIA so the accuracy is best.
@@ -3492,8 +3380,10 @@ AD5940Err AD5940_HSRtiaCal(HSRTIACal_Type *pCalCfg, void *pResult)
   /*INTC configuration */
   INTCCfg = AD5940_INTCGetCfg(AFEINTC_1);
   AD5940_INTCCfg(AFEINTC_1, AFEINTSRC_DFTRDY, bTRUE); /* Enable SINC2 Interrupt in INTC1 */
-  
+
+
   AD5940_AFECtrlS(AFECTRL_ALL, bFALSE);  /* Init all to disable state */
+
   /* Configure reference system */
   aferef_cfg.HpBandgapEn = bTRUE;
   aferef_cfg.Hp1V1BuffEn = bTRUE;
@@ -3507,7 +3397,8 @@ AD5940Err AD5940_HSRtiaCal(HSRTIACal_Type *pCalCfg, void *pResult)
   aferef_cfg.LpBandgapEn = bFALSE;
   aferef_cfg.LpRefBufEn = bFALSE;
   aferef_cfg.LpRefBoostEn = bFALSE;
-  AD5940_REFCfgS(&aferef_cfg);	
+  AD5940_REFCfgS(&aferef_cfg);
+
   /* Configure HP Loop */
   hs_loop.HsDacCfg.ExcitBufGain = ExcitBuffGain;
   hs_loop.HsDacCfg.HsDacGain = HsDacGain;
@@ -3516,7 +3407,7 @@ AD5940Err AD5940_HSRtiaCal(HSRTIACal_Type *pCalCfg, void *pResult)
   hs_loop.SWMatCfg.Dswitch = SWD_RCAL0;
   hs_loop.SWMatCfg.Pswitch = SWP_RCAL0;
   hs_loop.SWMatCfg.Nswitch = SWN_RCAL1;
-  hs_loop.SWMatCfg.Tswitch = SWT_RCAL1|SWT_TRTIA|SWT_AIN1;
+  hs_loop.SWMatCfg.Tswitch = SWT_RCAL1|SWT_TRTIA;
   hs_loop.WgCfg.WgType = WGTYPE_SIN;
   hs_loop.WgCfg.GainCalEn = bTRUE;
   hs_loop.WgCfg.OffsetCalEn = bTRUE;
@@ -3525,6 +3416,7 @@ AD5940Err AD5940_HSRtiaCal(HSRTIACal_Type *pCalCfg, void *pResult)
   hs_loop.WgCfg.SinCfg.SinOffsetWord = 0;
   hs_loop.WgCfg.SinCfg.SinPhaseWord = 0;
   AD5940_HSLoopCfgS(&hs_loop);
+
   /* Configure DSP */
   dsp_cfg.ADCBaseCfg.ADCMuxN = ADCMUXN_N_NODE;
   dsp_cfg.ADCBaseCfg.ADCMuxP = ADCMUXP_P_NODE;
@@ -3536,82 +3428,90 @@ AD5940Err AD5940_HSRtiaCal(HSRTIACal_Type *pCalCfg, void *pResult)
   dsp_cfg.ADCFilterCfg.ADCSinc3Osr = pCalCfg->ADCSinc3Osr;
   dsp_cfg.ADCFilterCfg.BpNotch = bTRUE;
   dsp_cfg.ADCFilterCfg.BpSinc3 = bFALSE;
+  dsp_cfg.ADCFilterCfg.DFTClkEnable = bTRUE;
+  dsp_cfg.ADCFilterCfg.Sinc2NotchClkEnable = bTRUE;
   dsp_cfg.ADCFilterCfg.Sinc2NotchEnable = bTRUE;
+  dsp_cfg.ADCFilterCfg.Sinc3ClkEnable = bTRUE;
+  dsp_cfg.ADCFilterCfg.WGClkEnable = bTRUE;
   
   memcpy(&dsp_cfg.DftCfg, &pCalCfg->DftCfg, sizeof(pCalCfg->DftCfg));
   memset(&dsp_cfg.StatCfg, 0, sizeof(dsp_cfg.StatCfg));
   AD5940_DSPCfgS(&dsp_cfg);
 
+
   /* Enable all of them. They are automatically turned off during hibernate mode to save power */
   AD5940_AFECtrlS(AFECTRL_HSTIAPWR|AFECTRL_INAMPPWR|AFECTRL_EXTBUFPWR|\
                 /*AFECTRL_WG|*/AFECTRL_DACREFPWR|AFECTRL_HSDACPWR|\
                 AFECTRL_SINC2NOTCH, bTRUE);
-  
-  /***** MEASURE VOLTAGE ACROSS RCAL *****/
+
+
   AD5940_AFECtrlS(AFECTRL_WG|AFECTRL_ADCPWR, bTRUE);  /* Enable Waveform generator, ADC power */
-  //wait for sometime.
-  AD5940_Delay10us(25);
   AD5940_AFECtrlS(AFECTRL_ADCCNV|AFECTRL_DFT, bTRUE);  /* Start ADC convert and DFT */
   /* Wait until DFT ready */
-  while(AD5940_INTCTestFlag(AFEINTC_1, AFEINTSRC_DFTRDY) == bFALSE);  
+  while(AD5940_INTCTestFlag(AFEINTC_1, AFEINTSRC_DFTRDY) == bFALSE);
   AD5940_AFECtrlS(AFECTRL_ADCCNV|AFECTRL_DFT|AFECTRL_WG|AFECTRL_ADCPWR, bFALSE);  /* Stop ADC convert and DFT */
   AD5940_INTCClrFlag(AFEINTSRC_DFTRDY);
-  
-  DftRcalVolt.Real = AD5940_ReadAfeResult(AFERESULT_DFTREAL);
-  DftRcalVolt.Image = AD5940_ReadAfeResult(AFERESULT_DFTIMAGE);
 
-  /***** MEASURE VOLTAGE ACROSS RTIA *****/
+  DftRcal.Real = AD5940_ReadAfeResult(AFERESULT_DFTREAL);
+  DftRcal.Image = AD5940_ReadAfeResult(AFERESULT_DFTIMAGE);
+
   AD5940_ADCMuxCfgS(ADCMUXP_HSTIA_P, ADCMUXN_HSTIA_N);
   AD5940_AFECtrlS(AFECTRL_WG|AFECTRL_ADCPWR, bTRUE);  /* Enable Waveform generator, ADC power */
-  //wait for sometime.
-  AD5940_Delay10us(25);
   AD5940_AFECtrlS(AFECTRL_ADCCNV|AFECTRL_DFT, bTRUE);  /* Start ADC convert and DFT */
   /* Wait until DFT ready */
-  while(AD5940_INTCTestFlag(AFEINTC_1, AFEINTSRC_DFTRDY) == bFALSE);  
+  while(AD5940_INTCTestFlag(AFEINTC_1, AFEINTSRC_DFTRDY) == bFALSE);
   AD5940_AFECtrlS(AFECTRL_ADCCNV|AFECTRL_DFT|AFECTRL_WG|AFECTRL_ADCPWR, bFALSE);  /* Stop ADC convert and DFT */
   AD5940_INTCClrFlag(AFEINTSRC_DFTRDY);
 
-  DftRtiaVolt.Real = AD5940_ReadAfeResult(AFERESULT_DFTREAL);
-  DftRtiaVolt.Image = AD5940_ReadAfeResult(AFERESULT_DFTIMAGE);
+  DftRtia.Real = AD5940_ReadAfeResult(AFERESULT_DFTREAL);
+  DftRtia.Image = AD5940_ReadAfeResult(AFERESULT_DFTIMAGE);
   
-  if(DftRcalVolt.Real&(1L<<17))
-    DftRcalVolt.Real |= 0xfffc0000;
-  if(DftRcalVolt.Image&(1L<<17))
-    DftRcalVolt.Image |= 0xfffc0000;
-  if(DftRtiaVolt.Real&(1L<<17))
-    DftRtiaVolt.Real |= 0xfffc0000;
-  if(DftRtiaVolt.Image&(1L<<17))
-    DftRtiaVolt.Image |= 0xfffc0000;
+  if(DftRcal.Real&(1L<<17))
+    DftRcal.Real |= 0xfffc0000;
+  if(DftRcal.Image&(1L<<17))
+    DftRcal.Image |= 0xfffc0000;
+  if(DftRtia.Real&(1L<<17))
+    DftRtia.Real |= 0xfffc0000;
+  if(DftRtia.Image&(1L<<17))
+    DftRtia.Image |= 0xfffc0000;
   /* 
     ADC MUX is set to HSTIA_P and HSTIA_N.
     While the current flow through RCAL and then into RTIA, the current direction should be from HSTIA_N to HSTIA_P if we 
     measure the voltage across RCAL by MUXSELP_P_NODE and MUXSELN_N_NODE.
     So here, we add a negative sign to results
   */
-  DftRtiaVolt.Image = -DftRtiaVolt.Image;
-  DftRtiaVolt.Real = -DftRtiaVolt.Real; /* Current is measured by MUX HSTIA_P-HSTIA_N. It should be  */
+  DftRtia.Image = -DftRtia.Image;
+  DftRtia.Real = -DftRtia.Real; /* Current is measured by MUX HSTIA_P-HSTIA_N. It should be  */
    /*
       The impedance engine inside of AD594x give us Real part and Imaginary part of DFT. Due to technology used, the Imaginary 
       part in register is the opposite number. So we add a negative sign on the Imaginary part of results. 
    */
-  DftRtiaVolt.Image = -DftRtiaVolt.Image;
-  DftRcalVolt.Image = -DftRcalVolt.Image;
+  DftRtia.Image = -DftRtia.Image;
+  DftRcal.Image = -DftRcal.Image;
 
-
-  /***** Implement RTIA = (V_Rtia / V_Rcal) * Rcal ******/
-  fImpCar_Type temp;
-  temp = AD5940_ComplexDivInt(&DftRtiaVolt, &DftRcalVolt);
-  temp.Real *= pCalCfg->fRcal;
-  temp.Image *= pCalCfg->fRcal;
   if(pCalCfg->bPolarResult == bFALSE)
   {
-    *(fImpCar_Type*)pResult = temp;
+     float temp = (float)DftRcal.Real*DftRcal.Real + (float)DftRcal.Image*DftRcal.Image;
+
+    /* RTIA = (DftRtia.Real, DftRtia.Image)/(DftRcal.Real, DftRcal.Image)*fRcal */
+    ((fImpCar_Type*)pResult)->Real = ((float)DftRtia.Real*DftRcal.Real+(float)DftRtia.Image*DftRcal.Image)/temp*pCalCfg->fRcal; /* Real Part */
+    ((fImpCar_Type*)pResult)->Image = ((float)DftRtia.Image*DftRcal.Real-(float)DftRtia.Real*DftRcal.Image)/temp*pCalCfg->fRcal; /* Imaginary Part */
+    //printf("RTIA mag:%f,",sqrt(pResult[0]*pResult[0]+pResult[1]*pResult[1]));
+    //printf("phase:%f\n",atan2(pResult[1],pResult[0])/3.1415926*180);
   }
   else
   {
-    ((fImpPol_Type*)pResult)->Magnitude = AD5940_ComplexMag(&temp);
-    ((fImpPol_Type*)pResult)->Phase = AD5940_ComplexPhase(&temp);
-  }
+    float RcalMag,RtiaMag,RtiaPhase;
+    RcalMag = sqrt((float)DftRcal.Real*DftRcal.Real+(float)DftRcal.Image*DftRcal.Image);
+    RtiaMag = sqrt((float)DftRtia.Real*DftRtia.Real+(float)DftRtia.Image*DftRtia.Image);
+    RtiaMag = (RtiaMag/RcalMag)*pCalCfg->fRcal;
+    RtiaPhase = atan2(DftRtia.Image,DftRtia.Real) - atan2(DftRcal.Image,DftRcal.Real);
+
+    ((fImpPol_Type*)pResult)->Magnitude = RtiaMag;
+    ((fImpPol_Type*)pResult)->Phase = RtiaPhase;
+    //printf("RTIA mag:%f,",RtiaMag);
+    //printf("phase:%f\n",RtiaPhase*180/MATH_PI);
+   }
   
   /* Restore INTC1 DFT configure */
   if(INTCCfg&AFEINTSRC_DFTRDY);
@@ -3642,7 +3542,7 @@ AD5940Err AD5940_LPRtiaCal(LPRTIACal_Type *pCalCfg, void *pResult)
   float ExcitVolt; /* Excitation voltage, unit is mV */
   uint32_t RtiaVal;
   /* RTIA value table when RLOAD set to 100Ohm */
-  uint32_t const LpRtiaTable[]={0,110,1000,2000,3000,4000,6000,8000,10000,12000,16000,20000,24000,30000,32000,40000,48000,64000,85000,96000,100000,120000,128000,160000,196000,256000,512000};
+  uint32_t const LpRtiaTable[]={0,200,1000,2000,3000,4000,6000,8000,10000,12000,16000,20000,24000,30000,32000,40000,48000,64000,85000,96000,100000,120000,128000,160000,196000,256000,512000};
   float const ADCPGAGainTable[] = {1, 1.5, 2, 4, 9};
   uint32_t WgAmpWord;
 
@@ -3736,7 +3636,11 @@ AD5940Err AD5940_LPRtiaCal(LPRTIACal_Type *pCalCfg, void *pResult)
 	dsp_cfg.ADCFilterCfg.ADCSinc3Osr = pCalCfg->ADCSinc3Osr;
 	dsp_cfg.ADCFilterCfg.BpNotch = bTRUE;
 	dsp_cfg.ADCFilterCfg.BpSinc3 = bFALSE;
+	dsp_cfg.ADCFilterCfg.DFTClkEnable = bTRUE;
+	dsp_cfg.ADCFilterCfg.Sinc2NotchClkEnable = bTRUE;
 	dsp_cfg.ADCFilterCfg.Sinc2NotchEnable = bTRUE;
+	dsp_cfg.ADCFilterCfg.Sinc3ClkEnable = bTRUE;
+	dsp_cfg.ADCFilterCfg.WGClkEnable = bTRUE;
 	memcpy(&dsp_cfg.DftCfg, &pCalCfg->DftCfg, sizeof(pCalCfg->DftCfg));
 	AD5940_DSPCfgS(&dsp_cfg);
   /* Configure LP Loop */
@@ -3856,6 +3760,14 @@ AD5940Err AD5940_LPRtiaCal(LPRTIACal_Type *pCalCfg, void *pResult)
   }
   else
   {
+    SEQCfg_Type seq_cfg, seq_cfg_backup;  /* Use sequencer to measure */
+    SEQInfo_Type seqinfo, seqinfo_backup;
+    const uint32_t SeqTakeMeasurment[3] = 
+    {
+      SEQ_WR(REG_AFE_AFECON, 0x00014c80), /* WG and ADC ON */
+      SEQ_WAIT(250*16),
+      SEQ_WR(REG_AFE_AFECON, 0x0001cd80), /* ADCCNV and DFT ON */
+    };
 		hs_loop.WgCfg.SinCfg.SinAmplitudeWord = WgAmpWord;
 		hs_loop.WgCfg.SinCfg.SinFreqWord = AD5940_WGFreqWordCal(pCalCfg->fFreq, pCalCfg->SysClkFreq);
 		hs_loop.WgCfg.SinCfg.SinOffsetWord = 0;
@@ -3866,6 +3778,27 @@ AD5940Err AD5940_LPRtiaCal(LPRTIACal_Type *pCalCfg, void *pResult)
     hs_loop.WgCfg.OffsetCalEn = bFALSE;
     AD5940_HSLoopCfgS(&hs_loop);
     AD5940_INTCClrFlag(AFEINTSRC_DFTRDY);
+    /* Configure sequencer, we use sequencer to control WG and DFT to ensure phase accuracy.
+    --> to ensure we delayed same time for both RCAL/RTIA measurement before turn on DFT. 
+    --> RCAL: WG ON --> Delay time -->DFT ON
+    --> RTIA: WG ON --> DealySameTime-->DFT ON
+    --> Phase accuracy --> good
+    */
+    AD5940_SEQGetCfg(&seq_cfg_backup);
+    AD5940_SEQInfoGet(SEQID_3, &seqinfo_backup);
+    seq_cfg.SeqMemSize = SEQMEMSIZE_2KB;  /* 2kB SRAM is used for sequencer */
+    seq_cfg.SeqBreakEn = bFALSE;
+    seq_cfg.SeqIgnoreEn = bFALSE;
+    seq_cfg.SeqCntCRCClr = bFALSE;
+    seq_cfg.SeqEnable = bTRUE;
+    seq_cfg.SeqWrTimer = 0;
+    AD5940_SEQCfg(&seq_cfg);          /* Enable sequencer */
+    seqinfo.pSeqCmd = SeqTakeMeasurment;
+    seqinfo.SeqId = SEQID_3;          /* We use SINC3 for calibration. */
+    seqinfo.SeqLen = SEQ_LEN(SeqTakeMeasurment);
+    seqinfo.SeqRamAddr = 0;           /* */
+    seqinfo.WriteSRAM = bTRUE;
+    AD5940_SEQInfoCfg(&seqinfo); 
 
     AD5940_AFECtrlS(AFECTRL_HSTIAPWR|AFECTRL_INAMPPWR, bTRUE);
     AD5940_Delay10us(100);      /* Wait for loop stable. */
@@ -3875,9 +3808,14 @@ AD5940Err AD5940_LPRtiaCal(LPRTIACal_Type *pCalCfg, void *pResult)
     pADCBaseCfg->ADCMuxP = ADCMUXP_P_NODE;
     pADCBaseCfg->ADCPga = ADCPgaGainRcal;
     AD5940_ADCBaseCfgS(pADCBaseCfg);
-    AD5940_AFECtrlS(AFECTRL_ADCPWR|AFECTRL_WG, bTRUE);
-    AD5940_Delay10us(25);
-    AD5940_AFECtrlS(AFECTRL_ADCCNV|AFECTRL_DFT, bTRUE);
+    /**
+     * Sequencer's job:
+     * 1. Turn ON waveform generator and ADC power
+     * 2. Wait 250us so the ADC is settled down.(ADC need 50us. We add extra 200us.)
+     * 3. Start ADC conversion and DFT. 
+     * Sequencer is used to start the DFT, then we wait until DFT results are ready.
+    */
+    AD5940_SEQMmrTrig(SEQID_3);
     /* Wait until DFT ready */
     while(AD5940_INTCTestFlag(AFEINTC_1, AFEINTSRC_DFTRDY) == bFALSE);  
     AD5940_AFECtrlS(AFECTRL_ADCCNV|AFECTRL_DFT|AFECTRL_WG|AFECTRL_ADCPWR, bFALSE);  /* Stop ADC convert and DFT */
@@ -3896,9 +3834,7 @@ AD5940Err AD5940_LPRtiaCal(LPRTIACal_Type *pCalCfg, void *pResult)
     }
     pADCBaseCfg->ADCPga = ADCPgaGainRtia;
     AD5940_ADCBaseCfgS(pADCBaseCfg);
-    AD5940_AFECtrlS(AFECTRL_ADCPWR|AFECTRL_WG, bTRUE);
-    AD5940_Delay10us(25);
-    AD5940_AFECtrlS(AFECTRL_ADCCNV|AFECTRL_DFT, bTRUE);
+    AD5940_SEQMmrTrig(SEQID_3);
     /* Wait until DFT ready */
     while(AD5940_INTCTestFlag(AFEINTC_1, AFEINTSRC_DFTRDY) == bFALSE);  
     AD5940_AFECtrlS(AFECTRL_ADCCNV|AFECTRL_DFT|AFECTRL_WG|AFECTRL_ADCPWR, bFALSE);  /* Stop ADC convert and DFT */
@@ -3913,6 +3849,10 @@ AD5940Err AD5940_LPRtiaCal(LPRTIACal_Type *pCalCfg, void *pResult)
       DftRtia.Real |= 0xfffc0000;
     if(DftRtia.Image&(1L<<17))
       DftRtia.Image |= 0xfffc0000;
+    /* Restore sequencer settings. */
+    AD5940_SEQCtrlS(bFALSE);  /* Disable Sequencer firstly before re-configure it. */
+    AD5940_SEQInfoCfg(&seqinfo_backup);
+    AD5940_SEQCfg(&seq_cfg_backup);
   }
   /*
       The impedance engine inside of AD594x give us Real part and Imaginary part of DFT. Due to technology used, the Imaginary 
@@ -3921,20 +3861,25 @@ AD5940Err AD5940_LPRtiaCal(LPRTIACal_Type *pCalCfg, void *pResult)
   DftRtia.Image = -DftRtia.Image;
   DftRcal.Image = -DftRcal.Image;
 
-  fImpCar_Type res;
-  /* RTIA = (DftRtia.Real, DftRtia.Image)/(DftRcal.Real, DftRcal.Image)*fRcal */
-  res = AD5940_ComplexDivInt(&DftRtia, &DftRcal);
-  res.Real *= pCalCfg->fRcal/GainRatio;
-  res.Image *= pCalCfg->fRcal/GainRatio;
   if(pCalCfg->bPolarResult == bFALSE)
   {
+    fImpCar_Type res;
+    /* RTIA = (DftRtia.Real, DftRtia.Image)/(DftRcal.Real, DftRcal.Image)*fRcal */
+    res = AD5940_ComplexDivInt(&DftRtia, &DftRcal);
+    res.Real *= pCalCfg->fRcal/GainRatio;
+    res.Image *= pCalCfg->fRcal/GainRatio;
     ((fImpCar_Type*)pResult)->Real = res.Real;
     ((fImpCar_Type*)pResult)->Image = res.Image;
   }
   else
   {
-    ((fImpPol_Type*)pResult)->Magnitude = AD5940_ComplexMag(&res);
-    ((fImpPol_Type*)pResult)->Phase = AD5940_ComplexPhase(&res);
+    float RcalMag,RtiaMag,RtiaPhase;
+    RcalMag = sqrt((float)DftRcal.Real*DftRcal.Real+(float)DftRcal.Image*DftRcal.Image);
+    RtiaMag = sqrt((float)DftRtia.Real*DftRtia.Real+(float)DftRtia.Image*DftRtia.Image);
+    RtiaMag = (RtiaMag/RcalMag)*pCalCfg->fRcal/GainRatio;
+    RtiaPhase = atan2(DftRtia.Image,DftRtia.Real) - atan2(DftRcal.Image,DftRcal.Real);
+    ((fImpPol_Type*)pResult)->Magnitude = RtiaMag;
+    ((fImpPol_Type*)pResult)->Phase = RtiaPhase;
   }
     
   /* Restore INTC1 DFT configure */
@@ -3954,7 +3899,6 @@ AD5940Err AD5940_LPRtiaCal(LPRTIACal_Type *pCalCfg, void *pResult)
   
   return AD5940ERR_OK;
 }
-
 
 /**
  * @brief calibrate HSDAC output voltage using ADC.
@@ -4034,7 +3978,11 @@ AD5940Err AD5940_HSDACCal(HSDACCal_Type *pCalCfg)
   adc_filter.ADCRate = bHPMode?ADCRATE_1P6MHZ:ADCRATE_800KHZ;        /* If ADC clock is 32MHz, then set it to ADCRATE_1P6MHZ. Default is 16MHz, use ADCRATE_800KHZ. */
   adc_filter.BpNotch = bTRUE;                 /* SINC2+Notch is one block, when bypass notch filter, we can get fresh data from SINC2 filter. */
   adc_filter.BpSinc3 = bFALSE;                /* We use SINC3 filter. */
+  adc_filter.Sinc3ClkEnable = bTRUE;          /* Enable SINC3 clock.  */
+  adc_filter.Sinc2NotchClkEnable = bTRUE;     
   adc_filter.Sinc2NotchEnable = bTRUE;        /* Enable the SINC2+Notch block. You can also use function AD5940_AFECtrlS */
+  adc_filter.DFTClkEnable = bFALSE;
+  adc_filter.WGClkEnable = bTRUE;  
   AD5940_ADCFilterCfgS(&adc_filter);
   /* Step0.1 Initialize ADC basic function */
   adc_base.ADCMuxP = ADCMUXP_P_NODE;
@@ -4168,7 +4116,11 @@ AD5940Err AD5940_LPDACCal(LPDACCal_Type *pCalCfg, LPDACPara_Type *pResult)
   adc_filter.ADCRate = bADCClk32MHzMode?ADCRATE_1P6MHZ:ADCRATE_800KHZ;        /* If ADC clock is 32MHz, then set it to ADCRATE_1P6MHZ. Default is 16MHz, use ADCRATE_800KHZ. */
   adc_filter.BpNotch = bTRUE;                       /* SINC2+Notch is one block, when bypass notch filter, we can get fresh data from SINC2 filter. */
   adc_filter.BpSinc3 = bFALSE;                      /* We use SINC3 filter. */
+  adc_filter.Sinc3ClkEnable = bTRUE;                /* Enable SINC3 clock.  */
+  adc_filter.Sinc2NotchClkEnable = bTRUE;           /* Enable SINC2 clock */
   adc_filter.Sinc2NotchEnable = bTRUE;              /* Enable the SINC2+Notch block. You can also use function AD5940_AFECtrlS */
+  adc_filter.DFTClkEnable = bFALSE;
+  adc_filter.WGClkEnable = bFALSE;
   AD5940_ADCFilterCfgS(&adc_filter);
   /* Initialize ADC MUx and PGA */
   adc_base.ADCMuxP = ADCMUXP_AGND;

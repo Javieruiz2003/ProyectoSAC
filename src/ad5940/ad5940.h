@@ -20,6 +20,7 @@
   * @{
   */
 
+void AD5940_Main(void);
 /** 
  * Select the correct chip.
  * Recommend to define this in your compiler.
@@ -33,7 +34,7 @@
 #define AD5940LIB_VER_PATCH       1    /**< Path number */
 #define AD5940LIB_VER   (AD5940LIB_VER_MAJOR<<16)|(AD5940LIB_VER_MINOR<<8)|(AD5940LIB_VER_PATCH)
 
-//#define ADI_DEBUG   /**< Comment this line to remove debug info. */
+#define ADI_DEBUG   /**< Comment this line to remove debug info. */
 
 #ifdef ADI_DEBUG
 #define ADI_Print printf   /**< Select the method to print out debug message */
@@ -286,7 +287,7 @@
 
 /* -------------------------------------------------------------------------------------------------------------------------
           AFEWDT_WDTCON                        Pos/Masks         Description
-   ------------------------------------------------------- ------------------------------------------------------------------ */
+   ------------------------------------------------------------------------------------------------------------------------- */
 #define BITP_AFEWDT_WDTCON_RESERVED_15_11    11            /*  RESERVED */
 #define BITP_AFEWDT_WDTCON_WDTIRQEN          10            /*  WDT Interrupt Enable */
 #define BITP_AFEWDT_WDTCON_MINLOAD_EN         9            /*  Timer Window Control */
@@ -1465,6 +1466,9 @@
 /* -------------------------------------------------------------------------------------------------------------------------
           AFE_ADCFILTERCON                     Pos/Masks         Description
    ------------------------------------------------------------------------------------------------------------------------- */
+#define BITP_AFE_ADCFILTERCON_DFTCLKENB      18            /*  DFT Clock Enable */
+#define BITP_AFE_ADCFILTERCON_DACWAVECLKENB  17            /*  DAC Wave Clock Enable */
+#define BITP_AFE_ADCFILTERCON_SINC2CLKENB    16            /*  SINC2 Filter Clock Enable */
 #define BITP_AFE_ADCFILTERCON_AVRGNUM        14            /*  Number of Samples Averaged */
 #define BITP_AFE_ADCFILTERCON_SINC3OSR       12            /*  SINC3 OSR */
 #define BITP_AFE_ADCFILTERCON_SINC2OSR        8            /*  SINC2 OSR */
@@ -1472,6 +1476,9 @@
 #define BITP_AFE_ADCFILTERCON_SINC3BYP        6            /*  SINC3 Filter Bypass */
 #define BITP_AFE_ADCFILTERCON_LPFBYPEN        4            /*  50/60Hz Low Pass Filter */
 #define BITP_AFE_ADCFILTERCON_ADCCLK          0            /*  ADC Data Rate */
+#define BITM_AFE_ADCFILTERCON_DFTCLKENB      0x00040000    /*  DFT Clock Enable */
+#define BITM_AFE_ADCFILTERCON_DACWAVECLKENB  0x00020000    /*  DAC Wave Clock Enable */
+#define BITM_AFE_ADCFILTERCON_SINC2CLKENB    0x00010000    /*  SINC2 Filter Clock Enable */
 #define BITM_AFE_ADCFILTERCON_AVRGNUM        0x0000C000    /*  Number of Samples Averaged */
 #define BITM_AFE_ADCFILTERCON_SINC3OSR       0x00003000    /*  SINC3 OSR */
 #define BITM_AFE_ADCFILTERCON_SINC2OSR       0x00000F00    /*  SINC2 OSR */
@@ -3583,7 +3590,7 @@
 #define ADCMUXP_VSE0                0xE     /**< Voltage of SE0 pin  */
 #define ADCMUXP_VSE1                0xF     /**< Voltage of SE1 pin on ADuCM355  */
 #define ADCMUXP_VAFE3               0xF     /**< Voltage of AFE3 pin on AD5940. */
-#define ADCMUXP_VREF2P5             0x10    /**< 1.25V. The internal 2.5V reference buffer output divided by 2. */
+#define ADCMUXP_VREF2P5             0x10    /**< The internal 2.5V reference buffer output. */
 #define ADCMUXP_VREF1P8DAC          0x12    /**< HSDAC 1.8V internal reference. It's only available when both AFECON.BIT20 and AFECON.BIT6 are set. */
 #define ADCMUXP_TEMPN               0x13    /**< Internal temperature output negative terminal */
 #define ADCMUXP_AIN4                0x14    /**< Voltage of AIN4/LPF0 pin  */
@@ -3970,7 +3977,6 @@
 #define DATATYPE_SINC3              1     /**< SINC3 data */
 #define DATATYPE_SINC2              2     /**< SINC2 Data */
 #define DATATYPE_DFT                3     /**< DFT */
-#define DATATYPE_NOTCH              4     /**< Notch filter output. (when notch is not bypassed) */
 //#define DATATYPE_MEAN
 /** @} */
 
@@ -4258,9 +4264,9 @@ typedef struct
 {
   uint32_t ADCSinc3Osr;
   uint32_t ADCSinc2Osr;
-  uint32_t ADCAvgNum;           /**< Average filter is enabled when DFT source is @ref DFTSRC_AVG in function @ref AD5940_DFTCfgS. This average filter is only used by DFT engine. */
+  uint32_t ADCAvgNum;
   uint32_t ADCRate;             /**< ADC Core sample rate */
-  BoolFlag BpNotch;             /**< Bypass Notch filter in SINC2+Notch block, so only SINC2 is used. ADCFILTERCON.BIT4 */
+  BoolFlag BpNotch;             /**< Bypass Notch filter module. ADCFILTERCON.BIT4 */
   BoolFlag BpSinc3;             /**< Bypass SINC3 Module */
   BoolFlag Sinc3ClkEnable;      /**< Enable SINC3 clock */
   BoolFlag Sinc2NotchClkEnable; /**< Enable SINC2+Notch clock */
@@ -4316,7 +4322,6 @@ typedef struct
 {
   uint32_t HstiaBias;         /**< When select Vzero as bias, the related switch(VZERO2HSTIA) at LPDAC should be closed */
   uint32_t HstiaRtiaSel;      /**< RTIA selection @ref HSTIARTIA_Const */
-  uint32_t ExtRtia;      /**< Value of external RTIA*/
   uint32_t HstiaCtia;         /**< Set internal CTIA value from 1 to 32 pF */
   BoolFlag DiodeClose;        /**< Close the switch for internal back to back diode */
   uint32_t HstiaDeRtia;       /**< DE0 node RTIA selection @ref HSTIADERTIA_Const */
@@ -4575,6 +4580,7 @@ typedef struct
   float AdcClkFreq;           /**< The real frequency of ADC clock */   
 
   uint32_t LpAmpSel;          /**< Select from LPAMP0 and LPAMP1. LPAMP1 is only available on ADuCM355. */
+  uint32_t CalSeqAddr;        /**< Sequencer is used for calibration, sepecify the available address for calibration-sequence */
   BoolFlag bWithCtia;         /**< Connect external CTIA or not. */
   uint32_t LpTiaRtia;         /**< LPTIA RTIA selection. */
   uint32_t LpAmpPwrMod;       /**< Amplifiers power mode setting */
@@ -4692,15 +4698,13 @@ typedef struct
 */
 typedef struct
 {
-  uint32_t DataType;          /**< The final data output selection. @ref DATATYPE_Const */
-  uint32_t DataCount;         /**< How many data you want. */
   uint32_t ADCSinc3Osr;       /**< ADC SINC3 filter OSR setting */
   uint32_t ADCSinc2Osr;       /**< ADC SINC2 filter OSR setting */
-  uint32_t ADCAvgNum;         /**< Average number for DFT engine. Only used when data type is DATATYPE_DFT and DftSrc is DFTSRC_AVG */
-  uint32_t DftSrc;            /**< The DFT source. Only used when data type is DATATYPE_DFT */
-  uint8_t  ADCRate;           /**< ADCRate @ref ADCRATE_Const. Only used when data type is DATATYPE_NOTCH */
-  BoolFlag BpNotch;           /**< Bypass notch filter or not. Only used when data type is DATATYPE_DFT and DftSrc is DFTSRC_SINC2NOTCH */
-  float RatioSys2AdcClk;      /**< Ratio of system clock to ADC clock frequency */
+  uint32_t ADCAvgNum;         /**< Average number for DFT engine, init this if DataType is DFT. */
+  uint32_t DftSrc;            /**< The DFT source. Init this if DataType is DFT. */
+  uint32_t DataType;          /**< The final data output selection. @ref DATATYPE_Const */
+  uint32_t DataCount;         /**< How many data you want. */
+  float RatioSys2AdcClk;/**< Ratio of system clock to ADC clock frequency */
 }ClksCalInfo_Type;
 
 /** 
@@ -4744,19 +4748,6 @@ typedef struct
 }iImpCar_Type;
 
 /**
- *  FreqParams_Type - Structure to store optimum filter settings 
-*/
-typedef struct
-{
-	BoolFlag HighPwrMode;
-	uint32_t DftNum;
-	uint32_t DftSrc;
-	uint32_t ADCSinc3Osr;
-	uint32_t ADCSinc2Osr;
-	uint32_t NumClks;
-}FreqParams_Type;
-
-/**
  * @} TypeDefinitions
 */
 
@@ -4782,7 +4773,6 @@ void      AD5940_SWMatrixCfgS(SWMatrixCfg_Type *pSwMatrix);
 void      AD5940_HSDacCfgS(HSDACCfg_Type *pHsDacCfg);
 AD5940Err AD5940_HSTIACfgS(HSTIACfg_Type *pHsTiaCfg);
 void      AD5940_HSRTIACfgS(uint32_t HSTIARtia);
-void __AD5940_SetDExRTIA(uint32_t DExPin, uint32_t DeRtia, uint32_t DeRload);
 
 /* 4. Low_Power_Loop Functions*/
 void      AD5940_LPLoopCfgS(LPLoopCfg_Type *pLpLoopCfg);
@@ -4837,7 +4827,6 @@ AD5940Err AD5940_WUPTTime(uint32_t SeqId, uint32_t SleepTime, uint32_t WakeupTim
 /* 7.1 Clock system */
 void      AD5940_CLKCfg(CLKCfg_Type *pClkCfg);
 void      AD5940_HFOSC32MHzCtrl(BoolFlag Mode32MHz);
-void 			AD5940_HPModeEn(BoolFlag Enable);	/* Switch system clocks to high power mode for EIS >80kHz)*/
 /* 7.2 AFE Interrupt */
 void      AD5940_INTCCfg(uint32_t AfeIntcSel, uint32_t AFEIntSrc, BoolFlag State);
 uint32_t  AD5940_INTCGetCfg(uint32_t AfeIntcSel);
@@ -4892,8 +4881,6 @@ uint32_t  AD5940_SEQCycleTime(void);
 void      AD5940_SweepNext(SoftSweepCfg_Type *pSweepCfg, float *pNextFreq);
 void      AD5940_StructInit(void *pStruct, uint32_t StructSize);
 float     AD5940_ADCCode2Volt(uint32_t code, uint32_t ADCPga, float VRef1p82); /* Calculate ADC code to voltage */
-BoolFlag  AD5940_Notch50HzAvailable(ADCFilterCfg_Type *pFilterInfo, uint8_t *dl);
-BoolFlag  AD5940_Notch60HzAvailable(ADCFilterCfg_Type *pFilterInfo, uint8_t *dl);
 fImpCar_Type AD5940_ComplexDivFloat(fImpCar_Type *a, fImpCar_Type *b);
 fImpCar_Type AD5940_ComplexMulFloat(fImpCar_Type *a, fImpCar_Type *b);
 fImpCar_Type AD5940_ComplexAddFloat(fImpCar_Type *a, fImpCar_Type *b);
@@ -4903,7 +4890,6 @@ fImpCar_Type AD5940_ComplexDivInt(iImpCar_Type *a, iImpCar_Type *b);
 fImpCar_Type AD5940_ComplexMulInt(iImpCar_Type *a, iImpCar_Type *b);
 float     AD5940_ComplexMag(fImpCar_Type *a);
 float     AD5940_ComplexPhase(fImpCar_Type *a);
-FreqParams_Type AD5940_GetFreqParameters(float freq);
 /**
  * @} Exported_Functions
 */
@@ -4913,6 +4899,8 @@ FreqParams_Type AD5940_GetFreqParameters(float freq);
  *  The functions user should provide for specific MCU platform
  * @{
 */
+void      AD5940_Init(void);
+void      AD5940_Main(void);
 void      AD5940_CsClr(void);
 void      AD5940_CsSet(void);
 void      AD5940_RstClr(void);
@@ -4926,7 +4914,11 @@ void      AD5940_ReadWriteNBytes(unsigned char *pSendBuffer,unsigned char *pRecv
 /* Below functions are frequently used in example code but not necessary for library */
 uint32_t  AD5940_GetMCUIntFlag(void);
 uint32_t  AD5940_ClrMCUIntFlag(void);
-uint32_t  AD5940_MCUResourceInit(void *pCfg);
+uint32_t  AD5940_MCUResourceInit(void);
+int       AD5940_ReadGP0Pin(void);
+void      AD5940_MCUResourceDeInit(void);
+void      AD5940PlatformCfg(void);
+
 /**
  * @} Library_Interface
 */

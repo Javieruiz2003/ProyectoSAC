@@ -1,42 +1,45 @@
-/*
- * Devicetree overlay for nRF5340 DK
- * Add your peripheral and pin configurations here.
- * See: https://docs.zephyrproject.org/latest/build/dts/howtos.html
- */
-&pinctrl {
-    spi2_default: spi2_default {
-        group1 {
-            psels = <NRF_PSEL(SPIM_SCK, 1, 15)>,
-                    <NRF_PSEL(SPIM_MOSI, 1, 13)>,
-                    <NRF_PSEL(SPIM_MISO, 1, 14)>;
-        };
-    };
+&spi4 {
+	status = "disabled";
+};
 
-    spi2_sleep: spi2_sleep {
-        group1 {
-            psels = <NRF_PSEL(SPIM_SCK, 1, 15)>,
-                    <NRF_PSEL(SPIM_MOSI, 1, 13)>,
-                    <NRF_PSEL(SPIM_MISO, 1, 14)>;
-            low-power-enable;
-        };
-    };
+&pinctrl {
+	spi2_default: spi2_default {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 1, 15)>,
+				<NRF_PSEL(SPIM_MOSI, 1, 13)>,
+				<NRF_PSEL(SPIM_MISO, 1, 14)>;
+		};
+	};
+	spi2_sleep: spi2_sleep {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 1, 15)>,
+				<NRF_PSEL(SPIM_MOSI, 1, 13)>,
+				<NRF_PSEL(SPIM_MISO, 1, 14)>;
+			low-power-enable;
+		};
+	};
 };
 
 &spi2 {
-    status = "okay";
-    pinctrl-0 = <&spi2_default>;
-    pinctrl-1 = <&spi2_sleep>;
-    pinctrl-names = "default", "sleep";
-
-    ad5940: ad5940@0 {
-        compatible = "adi,ad5940";
-        reg = <0>;
-        spi-max-frequency = <1000000>;
-    };
+	compatible = "nordic,nrf-spim";
+	status = "okay";
+	pinctrl-0 = <&spi2_default>;
+	pinctrl-1 = <&spi2_sleep>;
+	pinctrl-names = "default", "sleep";
+	/delete-property/ cs-gpios;
 };
 
 / {
-    aliases {
-        ad5940 = &ad5940;
-    };
+	ad5940_gpios {
+		compatible = "gpio-leds";
+		cs_pin: cs_pin {
+			gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;
+		};
+		rst_pin: rst_pin {
+			gpios = <&gpio0 7 GPIO_ACTIVE_LOW>;
+		};
+		int_pin: int_pin {
+			gpios = <&gpio1 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+		};
+	};
 };
