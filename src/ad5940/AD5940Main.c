@@ -69,8 +69,8 @@ int32_t BIAShowResult(uint32_t *pData, uint32_t DataCount)
     g_measurement_count++;
 
     if (g_measurement_count >= cfgSweepPoints) {
-      DEBUG_PRINT("\n=== MEASUREMENT COMPLETE: All %d points collected ===\n",
-                  (int)cfgSweepPoints);
+     // DEBUG_PRINT("\n=== MEASUREMENT COMPLETE: All %d points collected ===\n",
+    //              (int)cfgSweepPoints);
       g_measurement_complete = true;
 
       /* Reset for next measurement */
@@ -162,29 +162,40 @@ void AD5940_Main(void)
 {
   uint32_t temp;
 
-  BIAend = 0;
-
   AD5940PlatformCfg();
   AD5940BIAStructInit();
   AppBIAInit(AppBuff, APPBUFF_SIZE);
-  AppBIACtrl(BIACTRL_START, 0);
-  AD5940_ClrMCUIntFlag();
 
-  while (!BIAend) {
-    if (AD5940_GetMCUIntFlag()) {
-      AD5940_ClrMCUIntFlag();
-      temp = APPBUFF_SIZE;
-      AppBIAISR(AppBuff, &temp);
-      if (temp > 0) {
-        BIAShowResult(AppBuff, temp);
+  while (1)   // 🔥 LOOP INFINITO
+  {
+    /* Iniciar medición */
+    AppBIACtrl(BIACTRL_START, 0);
+    AD5940_ClrMCUIntFlag();
+
+    /* Esperar a que termine el sweep */
+    while (!BIAend) {
+      if (AD5940_GetMCUIntFlag()) {
+        AD5940_ClrMCUIntFlag();
+        temp = APPBUFF_SIZE;
+        AppBIAISR(AppBuff, &temp);
+
+        if (temp > 0) {
+          BIAShowResult(AppBuff, temp);
+        }
       }
+      k_usleep(100);
     }
-    k_usleep(100);
+
+    /* Sweep terminado */
+    BIAend = 0;
+
+    //DEBUG_PRINT("\n=== RESTARTING SWEEP ===\n\n");
+
+    /* ⚠️ NO apagamos el AD5940 */
+    /* ⚠️ NO llamamos a shutdown */
+
+    k_msleep(200);  // opcional (estabilizar)
   }
-  BIAend = 0;
-  DEBUG_PRINT("\n=== AD5940 MEASUREMENT COMPLETE ===\n");
-  AD5940_ShutDownS();
-  DEBUG_PRINT("AD5940 shutdown - chip in hibernation\n");
 }
 
 /**

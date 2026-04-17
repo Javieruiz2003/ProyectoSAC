@@ -507,12 +507,12 @@ static AD5940Err AppBIARegModify(int32_t * const pData, uint32_t *pDataCount)
     AppBIACfg.FifoDataCount += *pDataCount/4;
     if(AppBIACfg.FifoDataCount >= AppBIACfg.NumOfData)
     {
-      DEBUG_PRINT("=== AD5940 MEASUREMENT SEQUENCE COMPLETE ===\n");
-      DEBUG_PRINT("Total data points collected: %d\n", (int)AppBIACfg.FifoDataCount);
-      DEBUG_PRINT("Setting BIAend = 1, stopping AD5940 wake-up timer\n");
+      //DEBUG_PRINT("=== AD5940 MEASUREMENT SEQUENCE COMPLETE ===\n");
+      //DEBUG_PRINT("Total data points collected: %d\n", (int)AppBIACfg.FifoDataCount);
+      //DEBUG_PRINT("Setting BIAend = 1, stopping AD5940 wake-up timer\n");
       BIAend = 1;
       AD5940_WUPTCtrl(bFALSE);
-      DEBUG_PRINT("AD5940 now in idle state\n");
+      //DEBUG_PRINT("AD5940 now in idle state\n");
       return AD5940ERR_OK;
     }
   }
