@@ -24,10 +24,10 @@ Analog Devices Software License Agreement.
 #include "string.h"
 #include "math.h"
 #include "BodyImpedance.h"
-
+#include <zephyr/drivers/uart.h>
+#include "main.h"
 #define APPBUFF_SIZE 512
 uint32_t AppBuff[APPBUFF_SIZE];
-
 /* It's your choice here how to do with the data. Here is just an example to print them to UART */
 int32_t BIAShowResult(uint32_t *pData, uint32_t DataCount)
 {
@@ -35,13 +35,19 @@ int32_t BIAShowResult(uint32_t *pData, uint32_t DataCount)
 
   fImpPol_Type *pImp = (fImpPol_Type*)pData;
   AppBIACtrl(BIACTRL_GETFREQ, &freq);
+	int err = uart_tx(uart, pImp, sizeof(pImp), SYS_FOREVER_US);//envio el buffer de datos por el uart0
+  if (err) {
+    printk("Error al enviar datos por UART: %d\n", err);
+  }
+ // printf("Freq:%.2f ", freq); frecuencia es útil?¿
 
-  printf("Freq:%.2f ", freq);
-  /*Process data*/
+/*  printf("Freq:%.2f ", freq);
+  /*Process data
   for(int i=0;i<DataCount;i++)
   {
     printf("RzMag: %f Ohm , RzPhase: %f \n",pImp[i].Magnitude,pImp[i].Phase*180/MATH_PI);
-  }
+  }*/
+
   return 0;
 }
 

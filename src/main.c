@@ -2,9 +2,11 @@
 #include <zephyr/sys/printk.h>
 #include "ad5940/ad5940.h"
 #include "ad5940/BodyImpedance.h"
+#include <zephyr/drivers/uart.h>
 AppBIACfg_Type *pCfg = NULL;//esto es un puntero de la dirección donde se almacenará
 //la configuración 
 int AD5940Port_Init(void);
+const struct device *uart = DEVICE_DT_GET(DT_NODELABEL(uart0));
 
 AD5940Err err;
 uint32_t bufferLectura[512];
@@ -19,7 +21,9 @@ int main(void)
         printk("Error inicializando puerto AD5940\n");
         return 0;
     }
-
+    if (!device_is_ready(uart)) {
+        return; 
+    }
     printk("Puerto AD5940 inicializado\n");
 
     AD5940_RstClr();

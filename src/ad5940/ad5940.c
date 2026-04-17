@@ -12,6 +12,7 @@
  * Analog Devices Software License Agreement.
 **/
 #include "ad5940.h"
+#include "ad5940_port.h"
 
 /*! \mainpage AD5940 Library Introduction
  * 
