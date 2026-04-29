@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime
 import math
 import tkinter as tk
 from tkinter import messagebox, ttk
@@ -1816,7 +1817,8 @@ class MainWindow(ttk.Frame):
         messagebox.showerror(title, message)
 
     def log(self, message: str) -> None:
+        timestamp = datetime.now().strftime("%H:%M:%S")
         self.log_text.configure(state="normal")
-        self.log_text.insert("end", f"- {message}\n")
+        self.log_text.insert("end", f"- [{timestamp}] {message}\n")
         self.log_text.see("end")
         self.log_text.configure(state="disabled")
