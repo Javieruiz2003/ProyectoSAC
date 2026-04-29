@@ -21,6 +21,7 @@ TRACKING_CANVAS_HEIGHT = 168
 VIEW_PANEL_MAX_HEIGHT = 690
 VIEW_PANEL_MIN_HEIGHT = 480
 VIEW_PANEL_BOTTOM_MARGIN = 14
+VIEW_TAB_PADDING = (16, 18, 16, 14)
 ACTIVITY_PANEL_WIDTH = 320
 
 
@@ -204,7 +205,7 @@ class MainWindow(ttk.Frame):
         )
 
     def _build_notebook(self, parent: ttk.Frame) -> None:
-        notebook_shell = self._make_bounded_panel(parent)
+        notebook_shell = self._make_bounded_panel(parent, background=PALETTE["bg"])
         notebook_shell.grid(row=0, column=1, sticky="new")
         notebook_shell.columnconfigure(0, weight=1)
         notebook_shell.rowconfigure(1, weight=1)
@@ -220,15 +221,35 @@ class MainWindow(ttk.Frame):
         self.notebook = ttk.Notebook(notebook_shell, style="Tabless.TNotebook")
         self.notebook.grid(row=1, column=0, sticky="nsew")
 
-        self.access_tab = ttk.Frame(self.notebook, style="App.TFrame", padding=(4, 0, 4, 4))
-        self.sensor_tab = ttk.Frame(self.notebook, style="App.TFrame", padding=(4, 0, 4, 4))
-        self.profiles_tab = ttk.Frame(self.notebook, style="App.TFrame", padding=(4, 0, 4, 4))
-        self.calibration_tab = ttk.Frame(
-            self.notebook, style="App.TFrame", padding=(4, 0, 4, 4)
+        self.access_tab = ttk.Frame(
+            self.notebook,
+            style="App.TFrame",
+            padding=VIEW_TAB_PADDING,
         )
-        self.control_tab = ttk.Frame(self.notebook, style="App.TFrame", padding=(4, 0, 4, 4))
+        self.sensor_tab = ttk.Frame(
+            self.notebook,
+            style="App.TFrame",
+            padding=VIEW_TAB_PADDING,
+        )
+        self.profiles_tab = ttk.Frame(
+            self.notebook,
+            style="App.TFrame",
+            padding=VIEW_TAB_PADDING,
+        )
+        self.calibration_tab = ttk.Frame(
+            self.notebook,
+            style="App.TFrame",
+            padding=VIEW_TAB_PADDING,
+        )
+        self.control_tab = ttk.Frame(
+            self.notebook,
+            style="App.TFrame",
+            padding=VIEW_TAB_PADDING,
+        )
         self.commands_tab = ttk.Frame(
-            self.notebook, style="App.TFrame", padding=(4, 0, 4, 4)
+            self.notebook,
+            style="App.TFrame",
+            padding=VIEW_TAB_PADDING,
         )
 
         self.view_tabs: tuple[tuple[str, ttk.Frame], ...] = (
@@ -895,6 +916,8 @@ class MainWindow(ttk.Frame):
             highlightbackground=PALETTE["surface_alt"],
         )
         self.tracking_canvas.grid(row=1, column=0, sticky="nsew")
+        self.tracking_canvas.bind("<Motion>", self._on_tracking_canvas_motion)
+        self.tracking_canvas.bind("<Leave>", self._on_tracking_canvas_leave)
 
         summary_frame = ttk.Frame(realtime_card, style="Card.TFrame")
         summary_frame.grid(row=7, column=0, columnspan=2, sticky="ew", pady=(16, 0))
@@ -1040,10 +1063,11 @@ class MainWindow(ttk.Frame):
         parent: tk.Misc,
         *,
         width: int | None = None,
+        background: str | None = None,
     ) -> tk.Frame:
         panel = tk.Frame(
             parent,
-            bg=PALETTE["surface"],
+            bg=background or PALETTE["surface"],
             bd=0,
             highlightthickness=1,
             highlightbackground=PALETTE["surface_alt"],
@@ -1206,6 +1230,13 @@ class MainWindow(ttk.Frame):
             return f"{value:+.0f}%"
 
         return f"{value:.0f}%"
+
+    def _clamp_tracking_value(self, key: str, value: float) -> float:
+        for slider_key, _, min_value, max_value, _ in TRACKING_SLIDERS:
+            if slider_key == key:
+                return max(min_value, min(max_value, value))
+
+        return value
 
     def _get_realtime_pose_from_vars(self) -> HandPose:
         return HandPose(
@@ -1673,6 +1704,49 @@ class MainWindow(ttk.Frame):
             return
 
         self._refresh_realtime_tracking()
+
+    def _on_tracking_canvas_motion(self, event: tk.Event) -> None:
+        if not self.realtime_enabled_var.get():
+            return
+
+        width = max(self.tracking_canvas.winfo_width(), 1)
+        height = max(self.tracking_canvas.winfo_height(), 1)
+        x_ratio = max(0.0, min(1.0, event.x / width))
+        y_ratio = max(0.0, min(1.0, event.y / height))
+
+        self._syncing_tracking_ui = True
+        self.realtime_pose_vars["lateral_pct"].set(
+            self._clamp_tracking_value("lateral_pct", x_ratio * 200.0 - 100.0)
+        )
+        self.realtime_pose_vars["height_pct"].set(
+            self._clamp_tracking_value("height_pct", 100.0 - y_ratio * 100.0)
+        )
+        self._syncing_tracking_ui = False
+
+        for key, _, _, _, value_kind in TRACKING_SLIDERS:
+            self.realtime_value_vars[key].set(
+                self._format_tracking_value(self.realtime_pose_vars[key].get(), value_kind)
+            )
+
+        pose = self._get_realtime_pose_from_vars()
+        success, message = self.controller.update_realtime_hand_pose(
+            pose.height_pct,
+            pose.reach_pct,
+            pose.lateral_pct,
+            pose.wrist_deg,
+            pose.grip_pct,
+        )
+        if not success:
+            self.realtime_status_var.set(message)
+            return
+
+        self._refresh_realtime_tracking()
+
+    def _on_tracking_canvas_leave(self, _event: tk.Event) -> None:
+        if self.realtime_enabled_var.get():
+            self.realtime_status_var.set(
+                "Seguimiento activo en pausa de raton. Vuelve a la vista para continuar."
+            )
 
     def _on_add_command(self) -> None:
         try:
