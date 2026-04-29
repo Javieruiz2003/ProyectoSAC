@@ -1,40 +1,35 @@
 #include <zephyr/kernel.h>
 #include <zephyr/sys/printk.h>
-#include "ad5940/ad5940.h"
-#include "ad5940/BodyImpedance.h"
+#include <zephyr/random/random.h> // CORREGIDO
+#include <math.h> // Para funciones matemáticas como sinf()
+#include "graficas.h" // CORREGIDO: Incluye el .h, NO el .c
 
-int AD5940Port_Init(void);
+#define DATA_SIZE 100
 
 int main(void)
 {
-    printk("Inicio BIA\n");
+    float datos_impedancia[DATA_SIZE];
+    float fase = 0.0f;
 
-    if (AD5940Port_Init() != 0) {
-        printk("Error puerto\n");
-        return 0;
-    }
-
-    AD5940_RstClr();
-    k_msleep(50);
-    AD5940_RstSet();
-    k_msleep(50);
-
-    printk("Reset hecho\n");
-
-    AD5940_Initialize();
-
-    printk("Inicializando BIA...\n");
-
-    AppBIACfg_Type *pBIACfg;
-    AppBIAGetCfg(&pBIACfg);
-
-    AppBIAInit(0, 0);
-
-    printk("BIA listo\n");
+    printk("Iniciando test de Teleplot en nRF5340...\n");
+    k_sleep(K_MSEC(5000)); // Pausa para abrir Teleplot en el PC
 
     while (1) {
-        AppBIACtrl(BIACTRL_START, 0);
-        k_msleep(1000);
+        // 1. Generar datos de prueba (Simulamos una impedancia que oscila)
+        for (int i = 0; i < DATA_SIZE; i++) {
+            // Base de 150 Ohm + oscilación de 50 Ohm + pequeño ruido aleatorio
+            float ruido = (float)(sys_rand32_get() % 100) / 50.0f; 
+            datos_impedancia[i] = 150.0f + (50.0f * sinf(fase + (float)i * 0.1f)) + ruido;
+        }
+
+        // 2. Enviar el bloque de datos a Teleplot
+        graficar_datos_teleplot(datos_impedancia, DATA_SIZE, "Impedancia_Prueba");
+
+        // 3. Actualizar fase para que la siguiente gráfica sea distinta
+        fase += 0.5f;
+
+        printk("Bloque enviado. Esperando 2 segundos...\n");
+        k_sleep(K_MSEC(2000));
     }
 
     return 0;
