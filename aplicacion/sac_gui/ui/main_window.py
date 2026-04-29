@@ -7,6 +7,7 @@ from tkinter import messagebox, ttk
 from ..controller import AppController
 from ..models import BiometricData, HandPose
 from ..services.sensor import UartSensorConfig
+from ..storage import DEFAULT_NORMAL_MODE_PASSWORD
 from .styles import PALETTE, apply_styles
 
 TRACKING_SLIDERS = (
@@ -73,7 +74,7 @@ class MainWindow(ttk.Frame):
         self.arm_pose_summary_var = tk.StringVar()
 
         self.normal_username_var = tk.StringVar()
-        self.normal_password_var = tk.StringVar(value="brazo123")
+        self.normal_password_var = tk.StringVar()
         self.arm_code_var = tk.StringVar(value="2468")
         self.admin_usb_var = tk.StringVar(value="MASTER-USB-001")
 
@@ -1300,16 +1301,25 @@ class MainWindow(ttk.Frame):
         else:
             self.sensor_hw_var.set("Conectado" if sensor.hardware_ready else "Sin enlace")
 
-        if self.controller.has_registered_users():
+        has_registered_users = self.controller.has_registered_users()
+        if has_registered_users:
+            if self.normal_password_var.get() == DEFAULT_NORMAL_MODE_PASSWORD:
+                self.normal_password_var.set("")
             self.normal_hint_var.set(
                 "Usa usuario, contraseña y el código mostrado por el brazo."
             )
         else:
+            if not self.normal_password_var.get():
+                self.normal_password_var.set(DEFAULT_NORMAL_MODE_PASSWORD)
             self.normal_hint_var.set(
                 "Aún no hay usuarios registrados. Puedes entrar con la contraseña general y luego crear el primero."
             )
 
-        if not self.register_username_var.get() and ctx.current_username:
+        if (
+            not ctx.profile_loaded
+            and not self.register_username_var.get()
+            and ctx.current_username
+        ):
             self.register_username_var.set(ctx.current_username)
 
         profile_name = ctx.current_username or "Sin perfil activo"

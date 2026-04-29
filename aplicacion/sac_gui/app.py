@@ -10,6 +10,42 @@ from .storage import JsonStorage
 from .ui.main_window import MainWindow
 
 
+def _set_windows_app_id() -> None:
+    import ctypes
+    from ctypes import wintypes
+    import sys
+
+    if sys.platform != "win32":
+        return
+
+    try:
+        shell32 = ctypes.WinDLL("shell32", use_last_error=True)
+        shell32.SetCurrentProcessExplicitAppUserModelID.argtypes = [wintypes.LPCWSTR]
+        shell32.SetCurrentProcessExplicitAppUserModelID.restype = ctypes.c_long
+        shell32.SetCurrentProcessExplicitAppUserModelID("ProyectoSAC.Operator")
+    except (AttributeError, OSError, TypeError):
+        return
+
+
+def _apply_computer_photo_icon(root: tk.Tk) -> None:
+    icon = tk.PhotoImage(width=64, height=64)
+
+    def fill(color: str, x1: int, y1: int, x2: int, y2: int) -> None:
+        icon.put(color, to=(x1, y1, x2, y2))
+
+    fill("#0a3340", 8, 9, 56, 43)
+    fill("#0f4c5c", 10, 11, 54, 41)
+    fill("#d8edf0", 14, 15, 50, 35)
+    fill("#ffffff", 18, 18, 46, 27)
+    fill("#8fbec4", 15, 35, 49, 39)
+    fill("#0a3340", 28, 43, 36, 51)
+    fill("#0f4c5c", 23, 51, 41, 55)
+    fill("#c56a2d", 19, 55, 45, 59)
+
+    root.iconphoto(True, icon)
+    root._sac_photo_icon = icon
+
+
 def _apply_windows_computer_icon(root: tk.Tk) -> None:
     import ctypes
     from ctypes import wintypes
@@ -85,13 +121,6 @@ def _apply_windows_computer_icon(root: tk.Tk) -> None:
             return None
         return icon_handle
 
-    try:
-        shell32.SetCurrentProcessExplicitAppUserModelID.argtypes = [wintypes.LPCWSTR]
-        shell32.SetCurrentProcessExplicitAppUserModelID.restype = ctypes.c_long
-        shell32.SetCurrentProcessExplicitAppUserModelID("ProyectoSAC.Operator")
-    except (AttributeError, OSError, TypeError):
-        pass
-
     large_icon = _load_stock_icon(0) or _load_shell32_icon()
     small_icon = _load_stock_icon(shgsi_small_icon) or large_icon
     if not large_icon and not small_icon:
@@ -126,7 +155,9 @@ def run() -> None:
     base_dir = Path(__file__).resolve().parent.parent
     controller = build_controller(base_dir)
 
+    _set_windows_app_id()
     root = tk.Tk()
+    _apply_computer_photo_icon(root)
 
     def _on_close() -> None:
         controller.shutdown()
