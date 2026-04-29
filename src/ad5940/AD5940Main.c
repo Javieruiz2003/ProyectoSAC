@@ -1,136 +1,138 @@
-/*!
- *****************************************************************************
- @file:    AD5940Main.c
- @author:  $Author: nxu2 $
- @brief:   Used to control specific application and futhur process data.
- @version: $Revision: 766 $
- @date:    $Date: 2017-08-21 14:09:35 +0100 (Mon, 21 Aug 2017) $
- -----------------------------------------------------------------------------
-
-Copyright (c) 2017-2019 Analog Devices, Inc. All Rights Reserved.
-
-This software is proprietary to Analog Devices, Inc. and its licensors.
-By using this software you agree to the terms of the associated
-Analog Devices Software License Agreement.
-
-*****************************************************************************/
-/**
- * @addtogroup AD5940_System_Examples
- * @{
- *  @defgroup BioElec_Example
- *  @{
-  */
-
 #include "ad5940.h"
 #include <stdio.h>
-#include <zephyr/kernel.h>
+#include <math.h>
+#include <stdbool.h>
 #include "BodyImpedance.h"
-#include "AD5940Main.h"
 
 #define APPBUFF_SIZE 512
-uint32_t AppBuff[APPBUFF_SIZE];
-extern uint8_t BIAend;
+#define PRINT_DIV    1   /* Imprimir 1 de cada N muestras */
 
-/* Config parameters AD5940 */
-float cfgRcalVal = 10000;
-int32_t cfgNumOfData = DEFAULT_NUM_REPETITIONS * DEFAULT_SWEEP_POINTS;
+/* ===================== CONFIG GLOBAL  ===================== */
+#define DEFAULT_SWEEP_POINTS     5
+#define DEFAULT_NUM_REPETITIONS  1
+
+float cfgRcalVal = 10000.0f;
+
+/* CAMBIA ESTO SEGÚN LO QUE QUIERAS */
+int32_t cfgNumOfData = -1;  
+/* -1 = tiempo real continuo */
+/* DEFAULT_NUM_REPETITIONS * DEFAULT_SWEEP_POINTS = barrido finito */
+
 bool cfgSweepEn = true;
-float cfgSweepStart = 4000;
-float cfgSweepStop = 198000;
+float cfgSweepStart = 4000.0f;
+float cfgSweepStop  = 198000.0f;
 uint32_t cfgSweepPoints = DEFAULT_SWEEP_POINTS;
 uint8_t cfgNumRepetitions = DEFAULT_NUM_REPETITIONS;
 
-/* Buffer global para almacenar los puntos de medicion */
-MeasurementPoint g_measurement_buffer[DEFAULT_SWEEP_POINTS];
-uint8_t g_measurement_count = 0;
-static bool g_measurement_complete = false;
+/* ===================== OTROS PARAMETROS ===================== */
+#define CFG_BIA_ODR         200.0f
+#define CFG_FIFO_THRESH     4
+#define CFG_DFT_NUM         DFTNUM_4096
+#define CFG_SINC3_OSR       ADCSINC3OSR_2
+#define CFG_SWEEP_LOG       bFALSE
 
-/* It's your choice here how to do with the data. Here is just an example to print them to UART */
+uint32_t AppBuff[APPBUFF_SIZE];
+
+static uint32_t sample_id = 0;
+static uint32_t print_div_counter = 0;
+static uint8_t chip_info_printed = 0;
+
+/* ===================== PRINT ===================== */
 int32_t BIAShowResult(uint32_t *pData, uint32_t DataCount)
 {
   float freq;
-  float bi_result[3] = {0, 0, 0};
-
   fImpPol_Type *pImp = (fImpPol_Type*)pData;
+
   AppBIACtrl(BIACTRL_GETFREQ, &freq);
 
-  bi_result[0] = freq;
-  bi_result[1] = pImp[0].Magnitude;
-  bi_result[2] = pImp[0].Phase * 180 / MATH_PI;
+  for(uint32_t i = 0; i < DataCount; i++)
+  {
+    print_div_counter++;
 
-  DEBUG_PRINT("%.2f Hz %.2f Ohm %.2f deg\n",
-              (double)bi_result[0], (double)bi_result[1], (double)bi_result[2]);
+    if(print_div_counter >= PRINT_DIV)
+    {
+      print_div_counter = 0;
 
-  /* Store point in global buffer */
-  if (g_measurement_count < DEFAULT_SWEEP_POINTS) {
-    g_measurement_buffer[g_measurement_count].frequency = freq;
-    g_measurement_buffer[g_measurement_count].magnitude = pImp[0].Magnitude;
-    g_measurement_buffer[g_measurement_count].phase = pImp[0].Phase * 180 / MATH_PI;
-    g_measurement_count++;
+      float phase_deg = pImp[i].Phase * 180.0f / MATH_PI;
 
-    if (g_measurement_count >= cfgSweepPoints) {
-     // DEBUG_PRINT("\n=== MEASUREMENT COMPLETE: All %d points collected ===\n",
-    //              (int)cfgSweepPoints);
-      g_measurement_complete = true;
+      if(phase_deg > 180.0f)
+        phase_deg -= 360.0f;
 
-      /* Reset for next measurement */
-      g_measurement_count = 0;
-      g_measurement_complete = false;
+      printf("[ID:%u] %.2f Hz %.2f Ohm %.2f deg\n",
+             sample_id++,
+             (double)freq,
+             (double)pImp[i].Magnitude,
+             (double)phase_deg);
     }
   }
 
   return 0;
 }
 
-/* Initialize AD5940 basic blocks like clock */
+/* ===================== CONFIG HARDWARE ===================== */
 void AD5940PlatformCfg(void)
 {
   CLKCfg_Type clk_cfg;
   FIFOCfg_Type fifo_cfg;
   AGPIOCfg_Type gpio_cfg;
 
-  /* Use hardware reset */
   AD5940_HWReset();
-  AD5940_Delay10us(2000);  /* 20ms after reset */
   AD5940_Initialize();
-  /* Step1. Configure clock */
+
+  /* ID del chip solo una vez */
+  if(!chip_info_printed)
+  {
+    uint32_t adiid  = AD5940_ReadReg(REG_AFECON_ADIID);
+    uint32_t chipid = AD5940_ReadReg(REG_AFECON_CHIPID);
+
+    printf("=== AD5940 INIT ===\n");
+    printf("ADIID  = 0x%08X\n", adiid);
+    printf("CHIPID = 0x%08X\n", chipid);
+
+    chip_info_printed = 1;
+  }
+
+  /* CLOCK */
   clk_cfg.ADCClkDiv = ADCCLKDIV_1;
   clk_cfg.ADCCLkSrc = ADCCLKSRC_HFOSC;
   clk_cfg.SysClkDiv = SYSCLKDIV_1;
   clk_cfg.SysClkSrc = SYSCLKSRC_HFOSC;
-  clk_cfg.HfOSC32MHzMode = bFALSE;
+  clk_cfg.HfOSC32MHzMode = bTRUE;
   clk_cfg.HFOSCEn = bTRUE;
   clk_cfg.HFXTALEn = bFALSE;
   clk_cfg.LFOSCEn = bTRUE;
   AD5940_CLKCfg(&clk_cfg);
-  /* Step2. Configure FIFO and Sequencer*/
+
+  /* FIFO */
   fifo_cfg.FIFOEn = bFALSE;
   fifo_cfg.FIFOMode = FIFOMODE_FIFO;
   fifo_cfg.FIFOSize = FIFOSIZE_4KB;
   fifo_cfg.FIFOSrc = FIFOSRC_DFT;
-  fifo_cfg.FIFOThresh = 4;
+  fifo_cfg.FIFOThresh = CFG_FIFO_THRESH;
   AD5940_FIFOCfg(&fifo_cfg);
+
   fifo_cfg.FIFOEn = bTRUE;
   AD5940_FIFOCfg(&fifo_cfg);
 
-  /* Step3. Interrupt controller */
+  /* INTERRUPTS */
   AD5940_INTCCfg(AFEINTC_1, AFEINTSRC_ALLINT, bTRUE);
   AD5940_INTCCfg(AFEINTC_0, AFEINTSRC_DATAFIFOTHRESH, bTRUE);
   AD5940_INTCClrFlag(AFEINTSRC_ALLINT);
-  /* Step4: Reconfigure GPIO */
-  gpio_cfg.FuncSet = GP6_SYNC|GP5_SYNC|GP4_SYNC|GP2_TRIG|GP1_SYNC|GP0_INT;
+
+  /* GPIO */
+  gpio_cfg.FuncSet = GP6_SYNC | GP5_SYNC | GP4_SYNC | GP2_TRIG | GP1_SYNC | GP0_INT;
   gpio_cfg.InputEnSet = AGPIO_Pin2;
-  gpio_cfg.OutputEnSet = AGPIO_Pin0|AGPIO_Pin1|AGPIO_Pin4|AGPIO_Pin5|AGPIO_Pin6;
+  gpio_cfg.OutputEnSet = AGPIO_Pin0 | AGPIO_Pin1 | AGPIO_Pin4 | AGPIO_Pin5 | AGPIO_Pin6;
   gpio_cfg.OutVal = 0;
   gpio_cfg.PullEnSet = 0;
-
   AD5940_AGPIOCfg(&gpio_cfg);
+
+  AD5940_SleepKeyCtrlS(SLPKEY_UNLOCK);
 }
 
-/* !!Change the application parameters here if you want to change it to none-default value */
+/* ===================== CONFIG BIA ===================== */
 void AD5940BIAStructInit(void)
 {
-  static bool first_time = 1;
   AppBIACfg_Type *pBIACfg;
 
   AppBIAGetCfg(&pBIACfg);
@@ -139,66 +141,50 @@ void AD5940BIAStructInit(void)
   pBIACfg->MaxSeqLen = 512;
 
   pBIACfg->RcalVal = cfgRcalVal;
-  pBIACfg->DftNum = DFTNUM_8192;
-  pBIACfg->NumOfData = cfgNumOfData;
-  pBIACfg->BiaODR = 20;
-  pBIACfg->FifoThresh = 4;
-  pBIACfg->ADCSinc3Osr = ADCSINC3OSR_2;
+  pBIACfg->DftNum = CFG_DFT_NUM;
 
-  pBIACfg->SweepCfg.SweepEn = cfgSweepEn;
+  /*  CLAVE */
+  pBIACfg->NumOfData = cfgNumOfData;
+
+  pBIACfg->BiaODR = CFG_BIA_ODR;
+  pBIACfg->FifoThresh = CFG_FIFO_THRESH;
+  pBIACfg->ADCSinc3Osr = CFG_SINC3_OSR;
+
+  /* BARRIDO */
+  pBIACfg->SweepCfg.SweepEn = cfgSweepEn ? bTRUE : bFALSE;
   pBIACfg->SweepCfg.SweepStart = cfgSweepStart;
   pBIACfg->SweepCfg.SweepStop = cfgSweepStop;
   pBIACfg->SweepCfg.SweepPoints = cfgSweepPoints;
-  pBIACfg->SweepCfg.SweepLog = bTRUE;
+  pBIACfg->SweepCfg.SweepLog = CFG_SWEEP_LOG;
+  pBIACfg->SweepCfg.SweepIndex = 0;
 
-  if (first_time) {
-    pBIACfg->SweepCfg.SweepIndex = 0;
-    first_time = 0;
-  }
+  pBIACfg->SinFreq = cfgSweepStart;
 }
 
-
+/* ===================== MAIN ===================== */
 void AD5940_Main(void)
 {
   uint32_t temp;
 
   AD5940PlatformCfg();
   AD5940BIAStructInit();
+
   AppBIAInit(AppBuff, APPBUFF_SIZE);
+  AppBIACtrl(BIACTRL_START, 0);
 
-  while (1)   // 🔥 LOOP INFINITO
+  while(1)
   {
-    /* Iniciar medición */
-    AppBIACtrl(BIACTRL_START, 0);
-    AD5940_ClrMCUIntFlag();
+    if(AD5940_GetMCUIntFlag())
+    {
+      AD5940_ClrMCUIntFlag();
 
-    /* Esperar a que termine el sweep */
-    while (!BIAend) {
-      if (AD5940_GetMCUIntFlag()) {
-        AD5940_ClrMCUIntFlag();
-        temp = APPBUFF_SIZE;
-        AppBIAISR(AppBuff, &temp);
+      temp = APPBUFF_SIZE;
+      AppBIAISR(AppBuff, &temp);
 
-        if (temp > 0) {
-          BIAShowResult(AppBuff, temp);
-        }
+      if(temp > 0)
+      {
+        BIAShowResult(AppBuff, temp);
       }
-      k_usleep(100);
     }
-
-    /* Sweep terminado */
-    BIAend = 0;
-
-    //DEBUG_PRINT("\n=== RESTARTING SWEEP ===\n\n");
-
-    /* ⚠️ NO apagamos el AD5940 */
-    /* ⚠️ NO llamamos a shutdown */
-
-    k_msleep(200);  // opcional (estabilizar)
   }
 }
-
-/**
- * @}
- * @}
- * */
