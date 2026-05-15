@@ -9,7 +9,7 @@ El firmware configura el AD5940, ejecuta barridos de frecuencia de bioimpedancia
 | Nombre                      | Rol                  | GitHub            |
 |-----------------------------|----------------------|-------------------|
 | Rafael Cuadrado Sola        | Programador          | @rafacuadrado     |
-| Amadeusz Aparicio           | Programador          | @usuario          |
+| Amadeusz Aparicio           | Programador          | @cyber-embdsys    |
 | Javier Ruiz Hurtado         | Programador          | @Javieruiz2003    |
 | Francisco Santos Durán      | Programador          | @frasandur1       |
 
