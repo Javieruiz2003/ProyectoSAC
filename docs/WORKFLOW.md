@@ -8,14 +8,14 @@ El objetivo es que el equipo trabaje de forma organizada, trazable y verificable
 
 ## 2. Desarrollo por capas (no por sprints)
 
-En firmware embebido, el software se desarrolla **de abajo hacia arriba**, capa por capa. Cada capa depende de que la anterior funcione correctamente. No tiene sentido intentar enviar datos por BLE si el driver del sensor no lee bien.
+En firmware embebido, el software se desarrolla **de abajo hacia arriba**, capa por capa. Cada capa depende de que la anterior funcione correctamente. No tiene sentido intentar visualizar datos por UART si el driver del AD5940 no lee bien.
 
 Las 5 capas son:
 
 ```
 Capa 5: System Integration         ← Todo junto, threads, manejo de errores
          ▲
-Capa 4: Communication              ← BLE, UART, USB
+Capa 4: Communication              ← UART/logs, Teleplot, USB serial
          ▲
 Capa 3: Application Logic          ← Configurar sensor, procesar datos
          ▲
@@ -44,9 +44,9 @@ Capa 1: Hardware Setup             ← Devicetree overlay + Kconfig (prj.conf)
 
 ### Capa 4: Communication
 
-- **Qué se hace:** Implementar BLE GATT service, UART, USB u otro protocolo para transmitir datos a otro dispositivo.
-- **Pregunta clave:** "¿Puedo enviar datos y recibirlos en el otro extremo?"
-- **Verificación:** Los datos transmitidos se reciben correctamente en el dispositivo receptor (móvil, PC, etc.).
+- **Qué se hace:** Implementar UART/logs, salida compatible con Teleplot u otro protocolo para transmitir datos a un PC.
+- **Pregunta clave:** "¿Puedo enviar frecuencia, magnitud y fase y visualizarlas en el otro extremo?"
+- **Verificación:** Los datos transmitidos se reciben correctamente en el PC y se pueden representar en una herramienta gráfica.
 
 ### Capa 5: System Integration
 
@@ -68,7 +68,7 @@ El design doc no tiene que ser largo. Media página está bien. Lo importante es
 
 ### b) Implementación
 
-1. Crear una feature branch desde `main`: `feature/spi-driver`, `feature/ble-service`, etc.
+1. Crear una feature branch desde `main`: `feature/spi-driver`, `feature/serial-visualization`, etc.
 2. Escribir commits descriptivos en inglés: `"Add SPI initialization for AD5940"`, `"Fix chip ID read returning zero"`.
 3. El código debe compilar en cada commit. No hacer commits de código roto.
 
@@ -99,7 +99,7 @@ Bloque: SPI Driver
 
 Secuencia temporal:
 
-1. Abrir issue #2: "Implementar SPI driver para sensor X"
+1. Abrir issue #2: "Implementar SPI driver para AD5940"
 2. Crear `docs/designs/001-spi-driver.md`, abrir PR de design doc, revisarlo
 3. Crear branch `feature/spi-driver`, implementar
 4. Verificar: copiar logs a `docs/verification/001-spi-driver/`
@@ -154,16 +154,16 @@ Configurar en: **Settings -> Branches -> Add rule** para la branch `main`:
 
 Crear estos labels en el repositorio (Settings -> Labels):
 
-| Label            | Color   | Descripción                          |
-|------------------|---------|--------------------------------------|
-| `hardware-setup` | #0E8A16 | Capa 1: Devicetree, Kconfig         |
-| `driver`         | #1D76DB | Capa 2: Driver / Port Layer         |
-| `app-logic`      | #5319E7 | Capa 3: Application Logic           |
-| `communication`  | #FBCA04 | Capa 4: BLE, UART, USB              |
-| `integration`    | #D93F0B | Capa 5: System Integration          |
-| `docs`           | #0075CA | Documentación                        |
-| `bug`            | #D73A4A | Algo no funciona                     |
-| `enhancement`    | #A2EEEF | Mejora                               |
+| Label            | Color     | Descripción                              |
+|------------------|-----------|------------------------------------------|
+| `hardware-setup` | #0E8A16 | Capa 1: Devicetree, Kconfig              |
+| `driver`         | #1D76DB | Capa 2: Driver / Port Layer              |
+| `app-logic`      | #5319E7 | Capa 3: Application Logic                |
+| `communication`  | #FBCA04 | Capa 4: UART/logs, Teleplot, USB serial  |
+| `integration`    | #D93F0B | Capa 5: System Integration               |
+| `docs`           | #0075CA | Documentación                            |
+| `bug`            | #D73A4A | Algo no funciona                         |
+| `enhancement`    | #A2EEEF | Mejora                                   |
 
 ### Asignación
 
@@ -220,7 +220,7 @@ Cada hito se entrega con:
 |------------------------------|-----------------------------------|
 | Código fuente                | `src/`                            |
 | Devicetree overlays          | `boards/`                         |
-| Configuración Kconfig        | `prj.conf` (raíz)                |
+| Configuración Kconfig        | `prj.conf` (raíz)                 |
 | Requisitos del proyecto      | `docs/PRD.md`                     |
 | Arquitectura                 | `docs/architecture.md`            |
 | Design docs                  | `docs/designs/NNN-nombre.md`      |
