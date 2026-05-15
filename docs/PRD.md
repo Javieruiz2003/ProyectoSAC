@@ -38,7 +38,7 @@ Usar verbos concretos: leer, escribir, transmitir, calcular, configurar, mostrar
 | RNF-003 | Los datos enviados por UART deben mantener un formato estable y parseable | Mantenibilidad  |
 | RNF-004 | El sistema debe funcionar durante al menos 10 minutos sin bloqueos        | Fiabilidad      |
 | RNF-005 | Los fallos de comunicación con el AD5940 deben quedar visibles en logs    | Fiabilidad      |
-| RNF-006 | El código específico de portabilidad del AD5940 debe estar separado de la lógica de aplicación | Mantenibilidad |
+| RNF-006 | El código específico de portabilidad del AD5940 debe estar separado de la lógica de aplicación |Mantenibilidad |
 | RNF-007 | Las mediciones deben realizarse con electrodos y conexión segura para el usuario de prueba | Seguridad |
 
 <!--

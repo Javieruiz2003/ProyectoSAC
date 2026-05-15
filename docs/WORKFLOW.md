@@ -181,12 +181,12 @@ Usar **GitHub Projects** para visualizar el progreso:
 
 ## 6. Hitos de entrega
 
-| Hito | Entregable                             | Qué se evalúa                              |
+| Hito | Entregable                             | Qué se evalúa                               |
 |------|----------------------------------------|---------------------------------------------|
 | H1   | PRD + Arquitectura + Issues creados    | Planificación y documentación               |
 | H2   | Capas 1-2 funcionando                  | Comunicación con hardware + driver          |
 | H3   | Capas 3-4 funcionando                  | Lógica de aplicación + comunicación         |
-| H4   | Integración + demo final              | Sistema completo + presentación             |
+| H4   | Integración + demo final               | Sistema completo + presentación             |
 
 Cada hito se entrega con:
 

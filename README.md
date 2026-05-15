@@ -8,7 +8,7 @@ El firmware configura el AD5940, ejecuta barridos de frecuencia de bioimpedancia
 
 | Nombre                      | Rol                  | GitHub            |
 |-----------------------------|----------------------|-------------------|
-| Rafael Cuadrado Sola        | Programador          | @usuario          |
+| Rafael Cuadrado Sola        | Programador          | @rafacuadrado     |
 | Amadeusz Aparicio           | Programador          | @usuario          |
 | Javier Ruiz Hurtado         | Programador          | @Javieruiz2003    |
 | Francisco Santos Durán      | Programador          | @frasandur1       |
@@ -24,14 +24,14 @@ El firmware configura el AD5940, ejecuta barridos de frecuencia de bioimpedancia
 
 ## Conexiones principales
 
-| Señal | Pin nRF5340 DK | Uso |
-|-------|----------------|-----|
-| SCLK  | P1.15          | Reloj SPI2 |
-| MOSI  | P1.13          | Datos hacia AD5940 |
-| MISO  | P1.14          | Datos desde AD5940 |
-| CS    | P1.12          | Chip select manual, activo bajo |
-| RESET | P0.07          | Reset del AD5940, activo bajo |
-| INT   | P1.04          | Interrupción del AD5940, activo bajo |
+| Señal | Pin nRF5340 DK | Uso                                    |
+|-------|----------------|----------------------------------------|
+| SCLK  | P1.15          | Reloj SPI2                             |
+| MOSI  | P1.13          | Datos hacia AD5940                     |
+| MISO  | P1.14          | Datos desde AD5940                     |
+| CS    | P1.12          | Chip select manual, activo bajo        |
+| RESET | P0.07          | Reset del AD5940, activo bajo          |
+| INT   | P1.04          | Interrupción del AD5940, activo bajo   |
 
 
 ## Compilar y flashear
