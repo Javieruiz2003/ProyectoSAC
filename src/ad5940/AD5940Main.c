@@ -7,14 +7,14 @@
 #define APPBUFF_SIZE 512
 #define PRINT_DIV    1   /* Imprimir 1 de cada N muestras */
 
-/* ===================== CONFIG GLOBAL  ===================== */
+/* ===================== CONFIG GLOBAL ===================== */
 #define DEFAULT_SWEEP_POINTS     5
 #define DEFAULT_NUM_REPETITIONS  1
 
 float cfgRcalVal = 10000.0f;
 
-/* CAMBIA ESTO SEGÚN LO QUE QUIERAS */
-int32_t cfgNumOfData = -1;  
+/* Cambia esto segun lo que quieras */
+int32_t cfgNumOfData = -1;
 /* -1 = tiempo real continuo */
 /* DEFAULT_NUM_REPETITIONS * DEFAULT_SWEEP_POINTS = barrido finito */
 
@@ -143,7 +143,7 @@ void AD5940BIAStructInit(void)
   pBIACfg->RcalVal = cfgRcalVal;
   pBIACfg->DftNum = CFG_DFT_NUM;
 
-  /*  CLAVE */
+  /* CLAVE */
   pBIACfg->NumOfData = cfgNumOfData;
 
   pBIACfg->BiaODR = CFG_BIA_ODR;

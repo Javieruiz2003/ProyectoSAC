@@ -1,0 +1,157 @@
+{
+  "Reposo": {
+    "profile_version": 3,
+    "frequency_mean": 50000.0,
+    "magnitude_mean": 942.9729777423083,
+    "magnitude_std": 56.2135611009928,
+    "phase_mean": 7.208772134591548,
+    "phase_std": 6.992951667086633,
+    "sample_count": 75,
+    "peak_magnitude_range": 165.77101476747964,
+    "peak_phase_range": 22.471790975526584,
+    "bins": {
+      "50000": {
+        "frequency_mean": 50000.0,
+        "magnitude_mean": 942.9729777423083,
+        "magnitude_std": 56.2135611009928,
+        "phase_mean": 7.208772134591548,
+        "phase_std": 6.992951667086633,
+        "sample_count": 75
+      }
+    },
+    "updated_at": 1778677868.8777313,
+    "uses_rest_delta": false
+  },
+  "Puno cerrado": {
+    "profile_version": 3,
+    "frequency_mean": 50000.0,
+    "magnitude_mean": 1129.0568984823237,
+    "magnitude_std": 102.60017593836594,
+    "phase_mean": -6.323878356303719,
+    "phase_std": 8.864628781253598,
+    "sample_count": 75,
+    "peak_magnitude_range": 328.8217903602325,
+    "peak_phase_range": 30.02025068976519,
+    "bins": {
+      "50000": {
+        "frequency_mean": 50000.0,
+        "magnitude_mean": 1129.0568984823237,
+        "magnitude_std": 102.60017593836594,
+        "phase_mean": -6.323878356303719,
+        "phase_std": 8.864628781253598,
+        "sample_count": 75,
+        "delta_magnitude_mean": 186.08392074001534,
+        "delta_magnitude_std": 102.60017593836594,
+        "delta_phase_mean": -13.532650490895266,
+        "delta_phase_std": 8.864628781253598
+      }
+    },
+    "updated_at": 1778677878.9362164,
+    "uses_rest_delta": true,
+    "delta_magnitude_mean": 186.08392074001534,
+    "delta_magnitude_std": 102.60017593836594,
+    "delta_phase_mean": -13.532650490895266,
+    "delta_phase_std": 8.864628781253598,
+    "delta_peak_magnitude_range": 328.8217903602325,
+    "delta_peak_phase_range": 30.02025068976519
+  },
+  "Giro muneca": {
+    "profile_version": 3,
+    "frequency_mean": 50000.0,
+    "magnitude_mean": 981.381333499897,
+    "magnitude_std": 44.907932431357345,
+    "phase_mean": 2.194889777231573,
+    "phase_std": 5.821055012922179,
+    "sample_count": 75,
+    "peak_magnitude_range": 166.77670338205633,
+    "peak_phase_range": 21.86781352769775,
+    "bins": {
+      "50000": {
+        "frequency_mean": 50000.0,
+        "magnitude_mean": 981.381333499897,
+        "magnitude_std": 44.907932431357345,
+        "phase_mean": 2.194889777231573,
+        "phase_std": 5.821055012922179,
+        "sample_count": 75,
+        "delta_magnitude_mean": 38.40835575758855,
+        "delta_magnitude_std": 44.907932431357345,
+        "delta_phase_mean": -5.013882357359975,
+        "delta_phase_std": 5.821055012922179
+      }
+    },
+    "updated_at": 1778677889.0133913,
+    "uses_rest_delta": true,
+    "delta_magnitude_mean": 38.40835575758855,
+    "delta_magnitude_std": 44.907932431357345,
+    "delta_phase_mean": -5.013882357359975,
+    "delta_phase_std": 5.821055012922179,
+    "delta_peak_magnitude_range": 166.77670338205633,
+    "delta_peak_phase_range": 21.86781352769775
+  },
+  "Flexion brazo": {
+    "profile_version": 3,
+    "frequency_mean": 50000.0,
+    "magnitude_mean": 1028.887549071402,
+    "magnitude_std": 141.48108884457798,
+    "phase_mean": 1.8843326669022114,
+    "phase_std": 12.204100942345423,
+    "sample_count": 75,
+    "peak_magnitude_range": 338.0082909378078,
+    "peak_phase_range": 34.4336482588169,
+    "bins": {
+      "50000": {
+        "frequency_mean": 50000.0,
+        "magnitude_mean": 1028.887549071402,
+        "magnitude_std": 141.48108884457798,
+        "phase_mean": 1.8843326669022114,
+        "phase_std": 12.204100942345423,
+        "sample_count": 75,
+        "delta_magnitude_mean": 85.91457132909359,
+        "delta_magnitude_std": 141.48108884457798,
+        "delta_phase_mean": -5.324439467689337,
+        "delta_phase_std": 12.204100942345425
+      }
+    },
+    "updated_at": 1778677899.0885708,
+    "uses_rest_delta": true,
+    "delta_magnitude_mean": 85.91457132909359,
+    "delta_magnitude_std": 141.48108884457798,
+    "delta_phase_mean": -5.324439467689337,
+    "delta_phase_std": 12.204100942345425,
+    "delta_peak_magnitude_range": 338.0082909378078,
+    "delta_peak_phase_range": 34.4336482588169
+  },
+  "Extension brazo": {
+    "profile_version": 3,
+    "frequency_mean": 50000.0,
+    "magnitude_mean": 998.7522969240936,
+    "magnitude_std": 11.38285865638944,
+    "phase_mean": -0.6154623586608391,
+    "phase_std": 1.9016142408281795,
+    "sample_count": 25,
+    "peak_magnitude_range": 52.173862861034536,
+    "peak_phase_range": 9.267755156013246,
+    "bins": {
+      "50000": {
+        "frequency_mean": 50000.0,
+        "magnitude_mean": 998.7522969240936,
+        "magnitude_std": 11.38285865638944,
+        "phase_mean": -0.6154623586608391,
+        "phase_std": 1.9016142408281795,
+        "sample_count": 25,
+        "delta_magnitude_mean": 55.779319181785205,
+        "delta_magnitude_std": 11.38285865638944,
+        "delta_phase_mean": -7.824234493252387,
+        "delta_phase_std": 1.9016142408281795
+      }
+    },
+    "updated_at": 1778677959.7998254,
+    "uses_rest_delta": true,
+    "delta_magnitude_mean": 55.779319181785205,
+    "delta_magnitude_std": 11.38285865638944,
+    "delta_phase_mean": -7.824234493252387,
+    "delta_phase_std": 1.9016142408281795,
+    "delta_peak_magnitude_range": 52.173862861034536,
+    "delta_peak_phase_range": 9.267755156013246
+  }
+}
