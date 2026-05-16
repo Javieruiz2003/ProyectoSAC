@@ -18,6 +18,7 @@ target_compile_options(app PRIVATE
 target_sources(app PRIVATE
     src/main.c
     src/ad5940/ad5940.c
+    src/ad5940/AD5940Main.c
     src/ad5940/BodyImpedance.c
     src/ad5940/ad5940_port.c
     src/AD5940_SPI.c

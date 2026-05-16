@@ -55,6 +55,11 @@ El firmware configura el AD5940, ejecuta barridos de frecuencia de bioimpedancia
    putty -D /dev/ttyACM0 -b 115200
    ```
 
+5. Ejecutar aplicación de simulación:
+   ```
+   python scripts/gesture_gui.py
+   ```
+
 ## Salida esperada
 
 Durante la ejecución, el firmware imprime datos de bioimpedancia con este formato:
