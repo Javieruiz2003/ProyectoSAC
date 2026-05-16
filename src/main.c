@@ -6,8 +6,6 @@
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
-AD5940Err err;
-uint32_t bufferLectura[512];
 int main(void)
 {
 	/* Delay to allow serial connection before output */
