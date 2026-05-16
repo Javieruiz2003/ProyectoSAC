@@ -39,6 +39,18 @@
    minicom -D /dev/ttyACM0 -b 115200
    ```
 
+## Interfaz de reconocimiento de movimientos
+
+El proyecto incluye una primera GUI para leer la consola serie del firmware,
+calibrar movimientos por persona y reconocer gestos del brazo en tiempo real.
+
+```bash
+python -m pip install -r scripts/requirements-gesture-gui.txt
+python scripts/gesture_gui.py
+```
+
+La guia de uso esta en `scripts/README_gesture_gui.md`.
+
 ## Estructura del repositorio
 
 ```
@@ -62,6 +74,7 @@
 - [PRD - Requisitos del proyecto](docs/PRD.md)
 - [Arquitectura del sistema](docs/architecture.md)
 - [Flujo de trabajo](docs/WORKFLOW.md)
+- [Uso con nRF Connect for VS Code](docs/nrf-connect-vscode.md)
 
 ## Flujo de trabajo
 
