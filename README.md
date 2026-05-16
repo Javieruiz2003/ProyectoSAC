@@ -1,22 +1,38 @@
-# [Nombre del Proyecto]
+# DETECCIÓN DE MOVIMIENTO UTILIZANDO BIOIMPEDANCIA
 
-[Descripción breve del proyecto en 2-3 oraciones. Qué hace, qué hardware usa, qué problema resuelve.]
+Este proyecto implementa un sistema de monitorización de bioimpedancia usando el AD5940BIOZ conectado a una placa nRF5340 DK. Con este análisis se busca detectar movimientos de un brazo y diferenciar cambios en la señal de impedancia. Los datos se envían por UART/logs y se muestran en una herramienta de visualización gráfica.
+
+El firmware configura el AD5940, ejecuta barridos de frecuencia de bioimpedancia y emite muestras con frecuencia, magnitud y fase para su análisis.
 
 ## Equipo
 
-| Nombre          | Rol                  | GitHub          |
-|-----------------|----------------------|-----------------|
-| [Nombre]        | [Rol]                | @usuario        |
-| [Nombre]        | [Rol]                | @usuario        |
-| [Nombre]        | [Rol]                | @usuario        |
-| [Nombre]        | [Rol]                | @usuario        |
+| Nombre                      | Rol                  | GitHub            |
+|-----------------------------|----------------------|-------------------|
+| Rafael Cuadrado Sola        | Programador          | @rafacuadrado     |
+| Amadeusz Aparicio           | Programador          | @cyber-embdsys    |
+| Javier Ruiz Hurtado         | Programador          | @Javieruiz2003    |
+| Francisco Santos Durán      | Programador          | @frasandur1       |
 
 ## Requisitos previos
 
 - **nRF Connect SDK** v2.x instalado ([guía de instalación](https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/installation.html))
 - **VS Code** con la extensión **nRF Connect for VS Code**
-- **nRF5340 DK** (placa de desarrollo)
+- **Nordic nRF5340 DK** (placa de desarrollo)
+- **AD5940BIOZ** (placa para medición de bioimpedancia)
 - Cable USB para conexión y alimentación de la placa
+- Electrodos ECG para medición de bioimpedancia
+
+## Conexiones principales
+
+| Señal | Pin nRF5340 DK | Uso                                    |
+|-------|----------------|----------------------------------------|
+| SCLK  | P1.15          | Reloj SPI2                             |
+| MOSI  | P1.13          | Datos hacia AD5940                     |
+| MISO  | P1.14          | Datos desde AD5940                     |
+| CS    | P1.12          | Chip select manual, activo bajo        |
+| RESET | P0.07          | Reset del AD5940, activo bajo          |
+| INT   | P1.04          | Interrupción del AD5940, activo bajo   |
+
 
 ## Compilar y flashear
 
@@ -36,20 +52,24 @@
    ```bash
    # Opción 1: nRF Connect Serial Terminal en VS Code
    # Opción 2: desde la terminal
-   minicom -D /dev/ttyACM0 -b 115200
+   putty -D /dev/ttyACM0 -b 115200
    ```
 
-## Interfaz de reconocimiento de movimientos
+## Salida esperada
 
-El proyecto incluye una primera GUI para leer la consola serie del firmware,
-calibrar movimientos por persona y reconocer gestos del brazo en tiempo real.
+Durante la ejecución, el firmware imprime datos de bioimpedancia con este formato:
 
-```bash
-python -m pip install -r scripts/requirements-gesture-gui.txt
-python scripts/gesture_gui.py
+```text
+<frecuencia> Hz <magnitud> Ohm <fase> deg
 ```
 
-La guia de uso esta en `scripts/README_gesture_gui.md`.
+Ejemplo:
+
+```text
+4000.00 Hz 1234.56 Ohm -12.34 deg
+```
+
+Estos datos pueden visualizarse desde una terminal serie o adaptarse a herramientas como Teleplot.
 
 ## Estructura del repositorio
 
@@ -68,6 +88,10 @@ La guia de uso esta en `scripts/README_gesture_gui.md`.
 ├── CMakeLists.txt    ← Build system
 └── .github/          ← Templates de PR e issues
 ```
+
+## Seguridad de uso
+
+Este proyecto es un prototipo académico/técnico y no es un dispositivo médico. Las pruebas con electrodos deben realizarse con el hardware alimentado de forma segura, conexiones revisadas y supervisión del equipo. Los datos obtenidos no deben usarse para diagnóstico clínico.
 
 ## Documentación
 
